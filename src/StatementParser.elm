@@ -1,6 +1,6 @@
 module StatementParser exposing (answer)
 
-import NumberParser
+import NumberParser exposing (numParser)
 import Parser exposing ((|.), (|=), Parser, keyword, oneOf, run, spaces, succeed, symbol)
 
 
@@ -26,7 +26,7 @@ type StatementValue
 
 numthParser : Parser Int
 numthParser =
-    Parser.andThen thParser NumberParser.numParser
+    Parser.andThen thParser numParser
 
 
 thParser : Int -> Parser Int

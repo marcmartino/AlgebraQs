@@ -2,7 +2,7 @@ module WrittenOutNumberTests exposing (tests)
 
 import Expect
 import Test exposing (..)
-import WrittenOutNumber exposing (WrittenNumError(..), say)
+import WrittenOutNumber exposing (WrittenNumError(..), writeOut)
 
 
 tests : Test
@@ -11,63 +11,63 @@ tests =
         [ test "one" <|
             \() ->
                 Expect.equal (Ok "one")
-                    (say 1)
+                    (writeOut 1)
         , test "fourteen" <|
             \() ->
                 Expect.equal (Ok "fourteen")
-                    (say 14)
+                    (writeOut 14)
         , test "twenty" <|
             \() ->
                 Expect.equal (Ok "twenty")
-                    (say 20)
+                    (writeOut 20)
         , test "twenty-two" <|
             \() ->
                 Expect.equal (Ok "twenty-two")
-                    (say 22)
+                    (writeOut 22)
         , test "one hundred" <|
             \() ->
                 Expect.equal (Ok "one hundred")
-                    (say 100)
+                    (writeOut 100)
         , test "one hundred twenty" <|
             \() ->
                 Expect.equal (Ok "one hundred and twenty")
-                    (say 120)
+                    (writeOut 120)
         , test "one hundred twenty-three" <|
             \() ->
                 Expect.equal (Ok "one hundred and twenty-three")
-                    (say 123)
+                    (writeOut 123)
         , test "one thousand" <|
             \() ->
                 Expect.equal (Ok "one thousand")
-                    (say 1000)
+                    (writeOut 1000)
         , test "one thousand two hundred thirty-four" <|
             \() ->
                 Expect.equal (Ok "one thousand two hundred and thirty-four")
-                    (say 1234)
+                    (writeOut 1234)
         , test "one million" <|
             \() ->
                 Expect.equal (Ok "one million")
-                    (say 1000000)
+                    (writeOut 1000000)
         , test "1002345" <|
             \() ->
                 Expect.equal (Ok "one million two thousand three hundred and forty-five")
-                    (say 1002345)
+                    (writeOut 1002345)
         , test "one billion" <|
             \() ->
                 Expect.equal (Ok "one billion")
-                    (say 1000000000)
+                    (writeOut 1000000000)
         , test "number too large" <|
             \() ->
                 Expect.equal (Err TooLarge)
-                    (say 10000000000000000)
+                    (writeOut 10000000000000000)
         , test "negative number" <|
             \() ->
                 Expect.equal (Ok "negative forty-two")
-                    (say -42)
+                    (writeOut -42)
         , test "zero" <|
             \() ->
                 Expect.equal (Ok "zero")
-                    (say 0)
+                    (writeOut 0)
         , test "987654321123" <|
             \() ->
                 Expect.equal
@@ -78,5 +78,5 @@ tests =
                             ++ "one hundred and twenty-three"
                         )
                     )
-                    (say 987654321123)
+                    (writeOut 987654321123)
         ]

@@ -4,8 +4,8 @@ import Array exposing (Array, fromList)
 import List
 
 
-type alias DigitMap =
-    (String -> a) -> List a
+type alias DigitMap a =
+    (( Int, String ) -> a) -> List a
 
 
 singleDigitsList : List String
@@ -13,19 +13,9 @@ singleDigitsList =
     [ "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" ]
 
 
-singleDigits : Array String
-singleDigits =
-    fromList singleDigitsList
-
-
 teenDigitsList : List String
 teenDigitsList =
     [ "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "ninteen" ]
-
-
-teenDigits : Array String
-teenDigits =
-    fromList teenDigitsList
 
 
 tensDigitList : List String
@@ -33,14 +23,24 @@ tensDigitList =
     [ "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "nintey" ]
 
 
-tensDigits : Array String
-tensDigits =
-    fromList tensDigitList
-
-
 groupingNamesList : List String
 groupingNamesList =
     [ "thousand", "million", "billion", "trillion", "quadrillion", "quintrillion", "sentillion", "septillion" ]
+
+
+singleDigits : Array String
+singleDigits =
+    fromList singleDigitsList
+
+
+teenDigits : Array String
+teenDigits =
+    fromList teenDigitsList
+
+
+tensDigits : Array String
+tensDigits =
+    fromList tensDigitList
 
 
 groupingNames : Array String
@@ -73,21 +73,26 @@ listMap xs fn =
     List.map fn xs
 
 
-mapSingleDigitNames : DigitMap
+transformListIndex : (Int -> Int) -> List String -> List ( Int, String )
+transformListIndex indexFn =
+    List.indexedMap (\fst snd -> ( indexFn fst, snd ))
+
+
+mapSingleDigitNames : DigitMap a
 mapSingleDigitNames =
-    listMap singleDigitsList
+    listMap <| transformListIndex ((+) 1) singleDigitsList
 
 
-mapTeensDigitNames : DigitMap
+mapTeensDigitNames : DigitMap a
 mapTeensDigitNames =
-    listMap teenDigitsList
+    listMap <| transformListIndex ((+) 10) teenDigitsList
 
 
-mapTensDigitNames : DigitMap
+mapTensDigitNames : DigitMap a
 mapTensDigitNames =
-    listMap tensDigitList
+    listMap <| transformListIndex ((+) 1 >> (*) 10) tensDigitList
 
 
-mapGroupNames : DigitMap
+mapGroupNames : DigitMap a
 mapGroupNames =
-    listMap groupingNamesList
+    listMap <| transformListIndex identity ("" :: groupingNamesList)

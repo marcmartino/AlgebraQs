@@ -1,4 +1,4 @@
-module WrittenOutNumber exposing (WrittenNumError(..), say)
+module WrittenOutNumber exposing (WrittenNumError(..), writeOut)
 
 import WrittenNumbers exposing (digitGroupName, singleDigitName, teensDigitName, tensDigitName)
 
@@ -208,8 +208,8 @@ defaultToZero num =
         num
 
 
-say : Int -> Result WrittenNumError String
-say num =
+writeOut : Int -> Result WrittenNumError String
+writeOut num =
     let
         appendNegative =
             List.append [ negativeName num ]

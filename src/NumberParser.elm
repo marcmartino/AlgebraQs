@@ -1,6 +1,6 @@
 module NumberParser exposing (numParser)
 
-import Parser exposing ((|.), (|=), Parser, int, keyword, oneOf, succeed, symbol)
+import Parser exposing ((|.), (|=), Parser, int, keyword, oneOf, spaces, succeed, symbol)
 import WrittenNumbers exposing (mapSingleDigitNames, mapTeensDigitNames, mapTensDigitNames)
 
 
@@ -18,7 +18,12 @@ numParser : Parser Int
 numParser =
     oneOf
         [ succeed negate
-            |. symbol "-"
+            |. oneOf
+                [ symbol "-"
+                , succeed ()
+                    |. keyword "negative"
+                    |. spaces
+                ]
             |= oneOf
                 [ int
                 , threeDigitNumParser
@@ -52,9 +57,42 @@ twoDigitNumParser =
         ]
 
 
+subsequentHundredParser : Int -> Parser Int
+subsequentHundredParser n =
+    let
+        checkForAnd : Int -> Parser Int
+        checkForAnd x =
+            succeed x
+                |. spaces
+                |. oneOf
+                    [ succeed ()
+                        |. keyword "and"
+                        |. spaces
+                    , symbol ""
+                    ]
+    in
+    succeed identity
+        |. spaces
+        |= oneOf
+            [ Parser.map (always <| n * 100) (symbol "hundred")
+                |> Parser.andThen checkForAnd
+                |> Parser.andThen
+                    (\x ->
+                        succeed ((+) x)
+                            |= oneOf
+                                [ twoDigitNumParser
+                                , oneOf singleDigitParsers
+                                , Parser.map (always 0) (symbol "")
+                                ]
+                    )
+            , Parser.map (always n) (symbol "")
+            ]
+
+
 threeDigitNumParser : Parser Int
 threeDigitNumParser =
     oneOf
         [ twoDigitNumParser
         , oneOf singleDigitParsers
+            |> Parser.andThen subsequentHundredParser
         ]

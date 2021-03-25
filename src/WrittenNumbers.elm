@@ -80,7 +80,7 @@ transformListIndex indexFn =
 
 mapSingleDigitNames : DigitMap a
 mapSingleDigitNames =
-    listMap <| transformListIndex ((+) 1) singleDigitsList
+    listMap <| transformListIndex identity <| "zero" :: singleDigitsList
 
 
 mapTeensDigitNames : DigitMap a

@@ -37,4 +37,36 @@ tests =
             \() ->
                 Expect.equal (Ok 27)
                     (run numParser "twenty-seven")
+        , test "negative twenty-seven" <|
+            \() ->
+                Expect.equal (Ok -27)
+                    (run numParser "negative twenty-seven")
+        , test "three hundred" <|
+            \() ->
+                Expect.equal (Ok 300)
+                    (run numParser "three hundred")
+        , test "three hundred and two" <|
+            \() ->
+                Expect.equal (Ok 302)
+                    (run numParser "three hundred and two")
+        , test "three hundred and twenty" <|
+            \() ->
+                Expect.equal (Ok 320)
+                    (run numParser "three hundred and twenty")
+        , test "three hundred thirty" <|
+            \() ->
+                Expect.equal (Ok 330)
+                    (run numParser "three hundred thirty")
+        , test "three hundred and twenty-nine" <|
+            \() ->
+                Expect.equal (Ok 329)
+                    (run numParser "three hundred and twenty-nine")
+        , test "three hundred thirty-two" <|
+            \() ->
+                Expect.equal (Ok 332)
+                    (run numParser "three hundred thirty-two")
+        , test "negative two hundred and seventeen" <|
+            \() ->
+                Expect.equal (Ok -217)
+                    (run numParser "negative two hundred and seventeen")
         ]

@@ -1,0 +1,25 @@
+{
+  "name": "mathquestions",
+  "version": "1.0.0",
+  "description": "WIP",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "elm-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcmartino/AlgebraQs.git"
+  },
+  "author": "Marc Martino",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcmartino/AlgebraQs/issues"
+  },
+  "homepage": "https://github.com/marcmartino/AlgebraQs#readme",
+  "devDependencies": {
+    "elm-test": "^0.19.1-revision6"
+  }
+}

@@ -69,4 +69,20 @@ tests =
             \() ->
                 Expect.equal (Ok -217)
                     (run numParser "negative two hundred and seventeen")
+        , test "negative two hundred and seventeen million" <|
+            \() ->
+                Expect.equal (Ok -217000000)
+                    (run numParser "negative two hundred and seventeen million")
+        , test "seventy million" <|
+            \() ->
+                Expect.equal (Ok 70000000)
+                    (run numParser "seventy million")
+        , test "one thousand three hundred" <|
+            \() ->
+                Expect.equal (Ok 1300)
+                    (run numParser "one thousand three hundred")
+        , test "negative six hundred and thirty-seven million seven thousand fifty-nine" <|
+            \() ->
+                Expect.equal (Ok -637007059)
+                    (run numParser "negative six hundred and thirty-seven million seven thousand fifty-nine")
         ]

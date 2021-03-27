@@ -1,7 +1,7 @@
 module NumberParser exposing (numParser)
 
 import Parser exposing ((|.), (|=), Parser, int, keyword, oneOf, spaces, succeed, symbol)
-import WrittenNumbers exposing (mapSingleDigitNames, mapTeensDigitNames, mapTensDigitNames)
+import WrittenNumbers exposing (mapGroupNames, mapSingleDigitNames, mapTeensDigitNames, mapTensDigitNames)
 
 
 singleDigitParsers : List (Parser Int)
@@ -26,10 +26,10 @@ numParser =
                 ]
             |= oneOf
                 [ int
-                , threeDigitNumParser
+                , writtenOutNumParser
                 ]
         , int
-        , threeDigitNumParser
+        , writtenOutNumParser
         ]
 
 
@@ -89,10 +89,33 @@ subsequentHundredParser n =
             ]
 
 
-threeDigitNumParser : Parser Int
-threeDigitNumParser =
+writtenOutNumParser : Parser Int
+writtenOutNumParser =
     oneOf
         [ twoDigitNumParser
         , oneOf singleDigitParsers
             |> Parser.andThen subsequentHundredParser
         ]
+        |> Parser.andThen orderOfMagnitudeParser
+        |> Parser.andThen writtenOutNumRecurseParser
+
+
+orderOfMagnitudeParser : Int -> Parser Int
+orderOfMagnitudeParser prevVal =
+    succeed identity
+        |. spaces
+        |= oneOf
+            [ oneOf
+                (mapGroupNames <| \( num, token ) -> Parser.map (always (num * prevVal)) (keyword token))
+            , Parser.map (always prevVal) (symbol "")
+            ]
+
+
+writtenOutNumRecurseParser : Int -> Parser Int
+writtenOutNumRecurseParser x =
+    succeed identity
+        |. spaces
+        |= oneOf
+            [ Parser.map ((+) x) writtenOutNumParser
+            , Parser.map (always x) (symbol "")
+            ]

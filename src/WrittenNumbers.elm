@@ -55,7 +55,7 @@ singleDigitName x =
 
 teensDigitName : Int -> Maybe String
 teensDigitName x =
-    Array.get (x // 10 - 1) teenDigits
+    Array.get x teenDigits
 
 
 tensDigitName : Int -> Maybe String
@@ -95,4 +95,4 @@ mapTensDigitNames =
 
 mapGroupNames : DigitMap a
 mapGroupNames =
-    listMap <| transformListIndex identity ("" :: groupingNamesList)
+    listMap <| transformListIndex ((+) 1 >> (*) 3 >> (\x -> 10 ^ x)) groupingNamesList

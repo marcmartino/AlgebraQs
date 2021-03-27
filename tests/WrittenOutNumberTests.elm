@@ -16,6 +16,10 @@ tests =
             \() ->
                 Expect.equal (Ok "fourteen")
                     (writeOut 14)
+        , test "ten" <|
+            \() ->
+                Expect.equal (Ok "ten")
+                    (writeOut 10)
         , test "twenty" <|
             \() ->
                 Expect.equal (Ok "twenty")

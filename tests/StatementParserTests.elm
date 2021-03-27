@@ -65,6 +65,12 @@ tests =
         , test "five calculations" <|
             \() ->
                 Expect.equal (Just 24) <| answer "7 plus 3 to the 2nd + 1 times 8?"
+        , test "simple written out numbers" <|
+            \() ->
+                Expect.equal (Just 10) <| answer "seven plus three?"
+        , test "written out numbers that contains an order of magnitude" <|
+            \() ->
+                Expect.equal (Just 1000200) <| answer "What is one hundred times two plus one million?"
         , test "unknown operation" <|
             \() ->
                 Expect.equal Nothing <| answer "What is 52 cubed?"

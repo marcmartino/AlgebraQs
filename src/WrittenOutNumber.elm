@@ -136,7 +136,7 @@ getTensAndOnesWords tens ones =
             getSingleDigitName ones
 
         ( 1, _ ) ->
-            [ teensDigitName (tens * 10 + ones) ]
+            [ teensDigitName ones ]
 
         ( _, 0 ) ->
             [ tensDigitName tens ]

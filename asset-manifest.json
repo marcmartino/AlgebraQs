@@ -1,15 +1,15 @@
 {
-  "main.css": "algebraQs.marmar.io/static/css/main.0af5c45f.chunk.css",
-  "main.js": "algebraQs.marmar.io/static/js/main.ee52f6d9.chunk.js",
-  "main.js.map": "algebraQs.marmar.io/static/js/main.ee52f6d9.chunk.js.map",
-  "runtime~main.js": "algebraQs.marmar.io/static/js/runtime~main.b1b38bbf.js",
-  "runtime~main.js.map": "algebraQs.marmar.io/static/js/runtime~main.b1b38bbf.js.map",
-  "vendors~main.js": "algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js",
-  "vendors~main.js.map": "algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js.map",
-  "./service-worker.js": "algebraQs.marmar.io/./service-worker.js",
-  "favicon.ico": "algebraQs.marmar.io/favicon.ico",
-  "index.html": "algebraQs.marmar.io/index.html",
-  "logo.svg": "algebraQs.marmar.io/logo.svg",
-  "manifest.json": "algebraQs.marmar.io/manifest.json",
-  "precache-manifest.e05e80edd1e99783d7f46eadbdd54693.js": "algebraQs.marmar.io/precache-manifest.e05e80edd1e99783d7f46eadbdd54693.js"
+  "main.css": "//algebraQs.marmar.io/static/css/main.0af5c45f.chunk.css",
+  "main.js": "//algebraQs.marmar.io/static/js/main.da628c23.chunk.js",
+  "main.js.map": "//algebraQs.marmar.io/static/js/main.da628c23.chunk.js.map",
+  "runtime~main.js": "//algebraQs.marmar.io/static/js/runtime~main.e3960791.js",
+  "runtime~main.js.map": "//algebraQs.marmar.io/static/js/runtime~main.e3960791.js.map",
+  "vendors~main.js": "//algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js",
+  "vendors~main.js.map": "//algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js.map",
+  "./service-worker.js": "//algebraQs.marmar.io/./service-worker.js",
+  "favicon.ico": "//algebraQs.marmar.io/favicon.ico",
+  "index.html": "//algebraQs.marmar.io/index.html",
+  "logo.svg": "//algebraQs.marmar.io/logo.svg",
+  "manifest.json": "//algebraQs.marmar.io/manifest.json",
+  "precache-manifest.17c0854cfb5cb4059807423aacdd7a1c.js": "//algebraQs.marmar.io/precache-manifest.17c0854cfb5cb4059807423aacdd7a1c.js"
 }

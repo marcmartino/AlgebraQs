@@ -7,7 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "elm-test"
+    "start": "elm-app start",
+    "test": "elm-test",
+    "build": "elm-app build"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/marcmartino/AlgebraQs#readme",
   "devDependencies": {
+    "create-elm-app": "^5.22.0",
     "elm-test": "^0.19.1-revision6"
   }
 }

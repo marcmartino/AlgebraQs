@@ -1,3 +1,3 @@
 module.exports = {
-    homepage: "algebraQs.marmar.io"
+    homepage: "//algebraQs.marmar.io"
 }

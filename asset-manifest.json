@@ -1,15 +1,15 @@
 {
-  "main.css": "/static/css/main.0af5c45f.chunk.css",
-  "main.js": "/static/js/main.5a97867a.chunk.js",
-  "main.js.map": "/static/js/main.5a97867a.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.1b922744.js",
-  "runtime~main.js.map": "/static/js/runtime~main.1b922744.js.map",
-  "vendors~main.js": "/static/js/vendors~main.0b49ec49.chunk.js",
-  "vendors~main.js.map": "/static/js/vendors~main.0b49ec49.chunk.js.map",
-  "./service-worker.js": "/./service-worker.js",
-  "favicon.ico": "/favicon.ico",
-  "index.html": "/index.html",
-  "logo.svg": "/logo.svg",
-  "manifest.json": "/manifest.json",
-  "precache-manifest.4c275809e8ce2f1667c5f5ff2c86a1d7.js": "/precache-manifest.4c275809e8ce2f1667c5f5ff2c86a1d7.js"
+  "main.css": "/AlgebraQs/static/css/main.0af5c45f.chunk.css",
+  "main.js": "/AlgebraQs/static/js/main.df98fe80.chunk.js",
+  "main.js.map": "/AlgebraQs/static/js/main.df98fe80.chunk.js.map",
+  "runtime~main.js": "/AlgebraQs/static/js/runtime~main.9aa665bc.js",
+  "runtime~main.js.map": "/AlgebraQs/static/js/runtime~main.9aa665bc.js.map",
+  "vendors~main.js": "/AlgebraQs/static/js/vendors~main.0b49ec49.chunk.js",
+  "vendors~main.js.map": "/AlgebraQs/static/js/vendors~main.0b49ec49.chunk.js.map",
+  "./service-worker.js": "/AlgebraQs/./service-worker.js",
+  "favicon.ico": "/AlgebraQs/favicon.ico",
+  "index.html": "/AlgebraQs/index.html",
+  "logo.svg": "/AlgebraQs/logo.svg",
+  "manifest.json": "/AlgebraQs/manifest.json",
+  "precache-manifest.cee7d19fce0d6a9b87cc19ce97740303.js": "/AlgebraQs/precache-manifest.cee7d19fce0d6a9b87cc19ce97740303.js"
 }

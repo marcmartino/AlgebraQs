@@ -1,3 +1,3 @@
 module.exports = {
-    homepage: "https://marcmartino.github.io/AlgebraQs"
+    homepage: "algebraQs.marmar.io"
 }

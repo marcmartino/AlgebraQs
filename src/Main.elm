@@ -18,12 +18,19 @@ import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, bu
 
 type alias Model =
     { theme : Theme
+    , question : String
+    , answer : Maybe (Result String String)
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { theme = Dark }, Cmd.none )
+    ( { theme = Dark
+      , question = ""
+      , answer = Nothing
+      }
+    , Cmd.none
+    )
 
 
 
@@ -33,6 +40,9 @@ init =
 type Msg
     = NoOp
     | ToggleTheme
+    | UpdateQuestion String
+    | SubmitQuestion
+    | RandomQuestion
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -40,6 +50,14 @@ update msg model =
     case msg of
         NoOp ->
             ( model, Cmd.none )
+
+        UpdateQuestion newQ ->
+            ( { model
+                | question = newQ
+                , answer = Nothing
+              }
+            , Cmd.none
+            )
 
         ToggleTheme ->
             ( { model
@@ -53,9 +71,38 @@ update msg model =
             , Cmd.none
             )
 
+        SubmitQuestion ->
+            ( { model | answer = Just (Ok "twenty") }, Cmd.none )
+
+        RandomQuestion ->
+            ( { model | question = "what's up homie", answer = Just (Ok "it's just a test") }, Cmd.none )
+
 
 
 ---- VIEW ----
+
+
+answerText : Maybe (Result String String) -> String
+answerText answerObj =
+    case answerObj of
+        Nothing ->
+            ""
+
+        Just (Err err) ->
+            "Err: " ++ err
+
+        Just (Ok answer) ->
+            answer
+
+
+isJust : Maybe a -> Bool
+isJust maybe =
+    case maybe of
+        Just _ ->
+            True
+
+        _ ->
+            False
 
 
 view : Model -> Html Msg
@@ -91,7 +138,7 @@ darkToggle theme =
         }
 
 
-centralForm : Model -> Element msg
+centralForm : Model -> Element Msg
 centralForm model =
     let
         header =
@@ -111,13 +158,12 @@ centralForm model =
                 , spacingXY 0 10
                 , boxShadow model.theme
                 ]
-                [ -- Input.text []
-                  -- { text = "actual text"
-                  -- , placeholder = Just (Input.placeholder [] <| text "placeholder text")
-                  -- , label = Input.labelHidden "Algebraic Question"
-                  -- , onChange = always msg
-                  -- }
-                  el [ width fill, Background.color <| rgb255 255 255 255, borderRadius, padding 5 ] <| text "|"
+                [ Input.text [ borderRadius ]
+                    { text = model.question
+                    , placeholder = Just (Input.placeholder [] <| text "Ask me a question")
+                    , label = Input.labelHidden "What is your algebraic question?"
+                    , onChange = UpdateQuestion
+                    }
                 , row [ width fill, spacingXY 10 0 ]
                     [ Input.button
                         [ width fill
@@ -128,7 +174,7 @@ centralForm model =
                         , Element.focused
                             [ ctaFocusedColor ]
                         ]
-                        { onPress = Nothing, label = el [ centerX ] <| text "Go" }
+                        { onPress = Just SubmitQuestion, label = el [ centerX ] <| text "Go" }
                     , Input.button
                         [ width fill
                         , Background.color <| buttonColor model.theme
@@ -138,7 +184,7 @@ centralForm model =
                         , Element.focused
                             [ buttonFocusedColor ]
                         ]
-                        { onPress = Nothing, label = el [ centerX ] <| text "Random" }
+                        { onPress = Just RandomQuestion, label = el [ centerX ] <| text "Random" }
                     ]
                 ]
     in
@@ -168,9 +214,9 @@ answers model =
         , boxShadow model.theme
         ]
         [ row []
-            [ text "Q: ", text "What is three plus 17?" ]
+            [ text "Q: ", text model.question ]
         , row []
-            [ text "A: ", text "Twenty" ]
+            [ text "A: ", text <| answerText model.answer ]
         ]
 
 
@@ -202,7 +248,11 @@ dashboard model =
         ]
         [ darkToggle model.theme
         , centralForm model
-        , answers model
+        , if isJust model.answer then
+            answers model
+
+          else
+            text ""
         , footer model
         ]
 

@@ -9,11 +9,7 @@ import Element.Input as Input
 import Element.Region as Region
 import Html exposing (Html, a)
 import Icons exposing (github, moon, sun)
-import Palette exposing (backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
-
-
-darkMode =
-    True
+import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 
 
 
@@ -21,12 +17,13 @@ darkMode =
 
 
 type alias Model =
-    {}
+    { theme : Theme
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { theme = Dark }, Cmd.none )
 
 
 
@@ -35,11 +32,26 @@ init =
 
 type Msg
     = NoOp
+    | ToggleTheme
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
+        ToggleTheme ->
+            ( { model
+                | theme =
+                    if model.theme == Dark then
+                        Light
+
+                    else
+                        Dark
+              }
+            , Cmd.none
+            )
 
 
 
@@ -48,8 +60,12 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    layout [ Background.color (rgb255 238 241 245) ]
-        dashboard
+    layout
+        [ Background.color <| backgroundColor model.theme
+        , Font.family [ Font.typeface "Fira Sans", Font.sansSerif ]
+        ]
+    <|
+        dashboard model
 
 
 edges : { top : number, right : number, bottom : number, left : number }
@@ -57,17 +73,17 @@ edges =
     { top = 0, right = 0, bottom = 0, left = 0 }
 
 
-darkToggle : Bool -> Element msg
-darkToggle isDark =
+darkToggle : Theme -> Element Msg
+darkToggle theme =
     Input.button
         [ alignTop
         , alignRight
         , Border.rounded 15
         , paddingXY 10 10
         ]
-        { onPress = Nothing
+        { onPress = Just ToggleTheme
         , label =
-            if isDark then
+            if theme == Dark then
                 el [ Font.color sunOrange ] (sun |> Element.html)
 
             else
@@ -75,25 +91,25 @@ darkToggle isDark =
         }
 
 
-centralForm : Element msg
-centralForm =
+centralForm : Model -> Element msg
+centralForm model =
     let
         header =
             el
                 [ centerX
                 , Region.heading 1
                 , Font.size 24
-                , Font.color <| fontColor darkMode
+                , Font.color <| fontColor model.theme
                 ]
                 (text "Alg Qs")
 
         inputForm =
             column
                 [ padding 10
-                , Background.color <| secondBackgroundColor darkMode
+                , Background.color <| secondBackgroundColor model.theme
                 , borderRadius
                 , spacingXY 0 10
-                , boxShadow darkMode
+                , boxShadow model.theme
                 ]
                 [ -- Input.text []
                   -- { text = "actual text"
@@ -105,7 +121,7 @@ centralForm =
                 , row [ width fill, spacingXY 10 0 ]
                     [ Input.button
                         [ width fill
-                        , Background.color <| ctaColor darkMode
+                        , Background.color <| ctaColor model.theme
                         , borderRadius
                         , padding 5
                         , alignLeft
@@ -115,7 +131,7 @@ centralForm =
                         { onPress = Nothing, label = el [ centerX ] <| text "Go" }
                     , Input.button
                         [ width fill
-                        , Background.color <| buttonColor darkMode
+                        , Background.color <| buttonColor model.theme
                         , borderRadius
                         , padding 5
                         , alignRight
@@ -138,18 +154,18 @@ centralForm =
         ]
 
 
-answers : Element msg
-answers =
+answers : Model -> Element msg
+answers model =
     column
         [ centerX
         , centerY
         , width <| px 400
         , padding 10
-        , Background.color <| secondBackgroundColor darkMode
+        , Background.color <| secondBackgroundColor model.theme
         , borderRadius
         , spacingXY 0 10
-        , Font.color <| fontColor darkMode
-        , boxShadow darkMode
+        , Font.color <| fontColor model.theme
+        , boxShadow model.theme
         ]
         [ row []
             [ text "Q: ", text "What is three plus 17?" ]
@@ -158,14 +174,14 @@ answers =
         ]
 
 
-footer : Element msg
-footer =
+footer : Model -> Element msg
+footer model =
     row
         [ alignBottom
         , centerX
         , width fill
         , padding 20
-        , Font.color <| fontColor darkMode
+        , Font.color <| fontColor model.theme
         ]
         [ newTabLink [ alignLeft ]
             { url = "//github.com/marcmartino"
@@ -178,34 +194,17 @@ footer =
         ]
 
 
-dashboard : Element msg
-dashboard =
+dashboard : Model -> Element Msg
+dashboard model =
     column
         [ height fill
         , width fill
-        , Background.color <| backgroundColor darkMode
-        , Font.family [ Font.typeface "Fira Sans", Font.sansSerif ]
         ]
-        [ darkToggle darkMode
-        , centralForm
-        , answers
-        , footer
+        [ darkToggle model.theme
+        , centralForm model
+        , answers model
+        , footer model
         ]
-
-
-btn : Element a
-btn =
-    Input.button
-        [ alignTop
-        , alignRight
-        , focused
-            [ Background.color (rgb255 25 45 91)
-            , Font.color <| fontColor darkMode
-            ]
-        ]
-        { label = el [] (text "COMPARE")
-        , onPress = Nothing
-        }
 
 
 

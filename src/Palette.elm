@@ -5,16 +5,21 @@ import Element.Background as Background
 import Element.Border as Border
 
 
+type Theme
+    = Dark
+    | Light
+
+
 borderRadius : Element.Attribute msg
 borderRadius =
     Border.rounded 5
 
 
-boxShadow : Bool -> Element.Attr decorative msg
-boxShadow dark =
+boxShadow : Theme -> Element.Attr decorative msg
+boxShadow theme =
     Border.shadow
         { color =
-            if dark then
+            if theme == Dark then
                 celadonBlue
 
             else
@@ -35,9 +40,9 @@ boxShadow dark =
 --     xRgb.red - yRgb.red
 
 
-fontColor : Bool -> Color
-fontColor dark =
-    if dark then
+fontColor : Theme -> Color
+fontColor theme =
+    if theme == Dark then
         honeydew
 
     else
@@ -51,18 +56,18 @@ fontColor dark =
 -- ]
 
 
-backgroundColor : Bool -> Color
-backgroundColor dark =
-    if dark then
+backgroundColor : Theme -> Color
+backgroundColor theme =
+    if theme == Dark then
         prussianBlue
 
     else
         honeydew
 
 
-secondBackgroundColor : Bool -> Color
-secondBackgroundColor dark =
-    if dark then
+secondBackgroundColor : Theme -> Color
+secondBackgroundColor theme =
+    if theme == Dark then
         indigoDye
 
     else
@@ -85,13 +90,13 @@ buttonFocusedColor =
         }
 
 
-ctaColor : Bool -> Color
-ctaColor dark =
+ctaColor : Theme -> Color
+ctaColor theme =
     purpleMountain
 
 
-buttonColor : Bool -> Color
-buttonColor dark =
+buttonColor : Theme -> Color
+buttonColor theme =
     mauvelous
 
 

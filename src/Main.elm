@@ -9,7 +9,7 @@ import Element.Input as Input
 import Element.Region as Region
 import Html exposing (Html, a)
 import Icons exposing (github, moon, sun)
-import Palette exposing (backgroundColor, borderRadius, boxShadow, buttonColor, ctaColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
+import Palette exposing (backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 
 
 darkMode =
@@ -109,6 +109,8 @@ centralForm =
                         , borderRadius
                         , padding 5
                         , alignLeft
+                        , Element.focused
+                            [ ctaFocusedColor ]
                         ]
                         { onPress = Nothing, label = el [ centerX ] <| text "Go" }
                     , Input.button
@@ -117,6 +119,8 @@ centralForm =
                         , borderRadius
                         , padding 5
                         , alignRight
+                        , Element.focused
+                            [ buttonFocusedColor ]
                         ]
                         { onPress = Nothing, label = el [ centerX ] <| text "Random" }
                     ]
@@ -176,7 +180,12 @@ footer =
 
 dashboard : Element msg
 dashboard =
-    column [ height fill, width fill, Background.color <| backgroundColor darkMode ]
+    column
+        [ height fill
+        , width fill
+        , Background.color <| backgroundColor darkMode
+        , Font.family [ Font.typeface "Fira Sans", Font.sansSerif ]
+        ]
         [ darkToggle darkMode
         , centralForm
         , answers

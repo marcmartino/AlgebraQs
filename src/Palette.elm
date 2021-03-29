@@ -1,6 +1,7 @@
 module Palette exposing (..)
 
-import Element exposing (Color, rgb255, toRgb)
+import Element exposing (Color, rgb255, rgba255, toRgb)
+import Element.Background as Background
 import Element.Border as Border
 
 
@@ -66,6 +67,22 @@ secondBackgroundColor dark =
 
     else
         powderBlue
+
+
+ctaFocusedColor =
+    Background.gradient
+        { angle = 125
+        , steps =
+            [ rgba255 153 124 202 0.7 ]
+        }
+
+
+buttonFocusedColor =
+    Background.gradient
+        { angle = 125
+        , steps =
+            [ rgba255 244 164 171 0.7 ]
+        }
 
 
 ctaColor : Bool -> Color

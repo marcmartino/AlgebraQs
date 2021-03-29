@@ -7,9 +7,10 @@
   "vendors~main.js": "//algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js",
   "vendors~main.js.map": "//algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js.map",
   "./service-worker.js": "//algebraQs.marmar.io/./service-worker.js",
+  "favicon.default.ico": "//algebraQs.marmar.io/favicon.default.ico",
   "favicon.ico": "//algebraQs.marmar.io/favicon.ico",
   "index.html": "//algebraQs.marmar.io/index.html",
   "logo.svg": "//algebraQs.marmar.io/logo.svg",
   "manifest.json": "//algebraQs.marmar.io/manifest.json",
-  "precache-manifest.d6254b6d93ad6b49684b4a8bb92c8751.js": "//algebraQs.marmar.io/precache-manifest.d6254b6d93ad6b49684b4a8bb92c8751.js"
+  "precache-manifest.1fe2d3972cb7f7a0725a7184c9b8ca37.js": "//algebraQs.marmar.io/precache-manifest.1fe2d3972cb7f7a0725a7184c9b8ca37.js"
 }

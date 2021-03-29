@@ -1,10 +1,14 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "987da976a8b2a4169346a497ba84749d",
+    "url": "//algebraQs.marmar.io/favicon.default.ico"
+  },
+  {
+    "revision": "63311356f5711313005e27799607c83f",
     "url": "//algebraQs.marmar.io/favicon.ico"
   },
   {
-    "revision": "cae0ce9f98ab38d3b3fd420ed9864ab7",
+    "revision": "df6bc3cc18886f8ac98d5142cd3f7930",
     "url": "//algebraQs.marmar.io/index.html"
   },
   {

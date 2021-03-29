@@ -13,7 +13,7 @@ body {
   font-family: "Source Sans Pro", "Trebuchet MS", "Lucida Grande",
     "Bitstream Vera Sans", "Helvetica Neue", sans-serif;
 }
-body > div,
-body > div > div {
-  transition: background-color 0.5s;
+div {
+  transition: all 500ms;
+  transition-property: color, background-color, box-shadow;
 }

@@ -9,7 +9,7 @@ import Element.Input as Input
 import Element.Region as Region
 import Html exposing (Html, a)
 import Icons exposing (github, moon, sun)
-import Palette exposing (backgroundColor, borderRadius, buttonColor, ctaColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
+import Palette exposing (backgroundColor, borderRadius, boxShadow, buttonColor, ctaColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 
 
 darkMode =
@@ -93,6 +93,7 @@ centralForm =
                 , Background.color <| secondBackgroundColor darkMode
                 , borderRadius
                 , spacingXY 0 10
+                , boxShadow darkMode
                 ]
                 [ -- Input.text []
                   -- { text = "actual text"
@@ -144,6 +145,7 @@ answers =
         , borderRadius
         , spacingXY 0 10
         , Font.color <| fontColor darkMode
+        , boxShadow darkMode
         ]
         [ row []
             [ text "Q: ", text "What is three plus 17?" ]

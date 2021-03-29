@@ -1,12 +1,27 @@
 module Palette exposing (..)
 
 import Element exposing (Color, rgb255, toRgb)
-import Element.Border
+import Element.Border as Border
 
 
 borderRadius : Element.Attribute msg
 borderRadius =
-    Element.Border.rounded 5
+    Border.rounded 5
+
+
+boxShadow : Bool -> Element.Attr decorative msg
+boxShadow dark =
+    Border.shadow
+        { color =
+            if dark then
+                celadonBlue
+
+            else
+                opal
+        , offset = ( 2, 2 )
+        , blur = 3
+        , size = 4
+        }
 
 
 
@@ -61,6 +76,11 @@ ctaColor dark =
 buttonColor : Bool -> Color
 buttonColor dark =
     mauvelous
+
+
+opal : Color
+opal =
+    rgb255 201 219 219
 
 
 sunOrange : Color

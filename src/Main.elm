@@ -265,8 +265,17 @@ answers model =
         ]
         [ paragraph [] [ text "Q: ", text model.question ]
         , paragraph []
-            [ text "A: ", text <| answerText model.answer ]
+            [ text "A: ", text <| capitalize <| answerText model.answer ++ "." ]
         ]
+
+
+capitalize : String -> String
+capitalize str =
+    let
+        firstLetter =
+            String.left 1 str |> String.toUpper
+    in
+    firstLetter ++ String.dropLeft 1 str
 
 
 footer : Model -> Element msg

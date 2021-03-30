@@ -2,14 +2,12 @@ module ExampleStatementGenerator exposing (ExampleStatement, generateStatement, 
 
 import Array exposing (Array)
 import Random
+import WrittenOutNumber exposing (writeOut)
 
 
 type alias ExampleStatement =
-    { x : String
-    , op1 : String
-    , y : String
-    , op2 : String
-    , z : String
+    { scalars : List String
+    , operators : List String
     }
 
 
@@ -37,15 +35,43 @@ operator =
 
 scalar : Random.Generator String
 scalar =
-    Random.int -90000000 90000000
+    Random.int -1000000 1000000
         |> Random.map String.fromInt
 
 
 generateStatement : Random.Generator ExampleStatement
 generateStatement =
-    Random.map5 ExampleStatement scalar operator scalar operator scalar
+    Random.int 2 4
+        |> Random.andThen (\l -> Random.map2 ExampleStatement (Random.list l scalar) (Random.list (l - 1) operator))
 
 
 prettyExampleStatement : ExampleStatement -> String
-prettyExampleStatement { x, op1, y, op2, z } =
-    String.join " " [ "What is", x, op1, y, op2, z ++ "?" ]
+prettyExampleStatement { scalars, operators } =
+    let
+        scalarOpPairs : List ( String, String )
+        scalarOpPairs =
+            List.map2 Tuple.pair scalars (List.append operators [ "" ])
+
+        combinedValues : List String
+        combinedValues =
+            List.indexedMap
+                (\index ( num, op ) ->
+                    case index of
+                        0 ->
+                            num
+                                ++ " "
+                                ++ op
+
+                        _ ->
+                            " "
+                                ++ num
+                                ++ (if op /= "" then
+                                        " " ++ op
+
+                                    else
+                                        ""
+                                   )
+                )
+                scalarOpPairs
+    in
+    "What is " ++ String.join " " combinedValues ++ "?"

@@ -7,11 +7,13 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
+import ExampleStatementGenerator exposing (ExampleStatement, generateStatement, prettyExampleStatement)
 import Html exposing (Html, a)
 import Html.Events
 import Icons exposing (github, moon, sun)
 import Json.Decode as Decode
 import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
+import Random
 import StatementParser exposing (answer)
 import WrittenOutNumber exposing (writeOut)
 
@@ -46,7 +48,23 @@ type Msg
     | ToggleTheme
     | UpdateQuestion String
     | SubmitQuestion
-    | RandomQuestion
+    | GenerateRandomQuestion
+    | SubmitRandomQuestion ExampleStatement
+
+
+parseAnswer : String -> Result String String
+parseAnswer q =
+    case answer q of
+        Just num ->
+            case writeOut num of
+                Ok ans ->
+                    Ok ans
+
+                _ ->
+                    Err "writting out errpr"
+
+        _ ->
+            Err "parse error"
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -76,24 +94,18 @@ update msg model =
             )
 
         SubmitQuestion ->
+            ( { model | answer = Just <| parseAnswer <| model.question }, Cmd.none )
+
+        GenerateRandomQuestion ->
+            -- ( model, Random.generate generateStatement SubmitRandomQuestion )
+            ( model, Cmd.none )
+
+        SubmitRandomQuestion exampleQ ->
             let
-                parsedAnswer =
-                    case answer model.question of
-                        Just num ->
-                            case writeOut num of
-                                Ok ans ->
-                                    Ok ans
-
-                                _ ->
-                                    Err "writting out errpr"
-
-                        _ ->
-                            Err "parse error"
+                newQ =
+                    prettyExampleStatement exampleQ
             in
-            ( { model | answer = Just parsedAnswer }, Cmd.none )
-
-        RandomQuestion ->
-            ( { model | question = "what's up homie", answer = Just (Ok "it's just a test") }, Cmd.none )
+            ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }, Cmd.none )
 
 
 
@@ -124,7 +136,7 @@ answerText answerObj =
             ""
 
         Just (Err err) ->
-            "Err: " ++ err
+            "Err- " ++ err
 
         Just (Ok answer) ->
             answer
@@ -222,7 +234,7 @@ centralForm model =
                         , Element.focused
                             [ buttonFocusedColor ]
                         ]
-                        { onPress = Just RandomQuestion, label = el [ centerX ] <| text "Random" }
+                        { onPress = Just GenerateRandomQuestion, label = el [ centerX ] <| text "Random" }
                     ]
                 ]
     in

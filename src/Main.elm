@@ -61,7 +61,7 @@ parseAnswer q =
                     Ok ans
 
                 _ ->
-                    Err "writting out errpr"
+                    Err "writting out error"
 
         _ ->
             Err "parse error"
@@ -97,8 +97,7 @@ update msg model =
             ( { model | answer = Just <| parseAnswer <| model.question }, Cmd.none )
 
         GenerateRandomQuestion ->
-            -- ( model, Random.generate generateStatement SubmitRandomQuestion )
-            ( model, Cmd.none )
+            ( model, Random.generate SubmitRandomQuestion generateStatement )
 
         SubmitRandomQuestion exampleQ ->
             let
@@ -205,7 +204,7 @@ centralForm model =
                 , spacingXY 0 10
                 , boxShadow model.theme
                 ]
-                [ Input.text
+                [ Input.multiline
                     [ borderRadius
                     , onEnter SubmitQuestion
                     ]
@@ -213,6 +212,7 @@ centralForm model =
                     , placeholder = Just (Input.placeholder [] <| text "Ask me a question")
                     , label = Input.labelHidden "What is your algebraic question?"
                     , onChange = UpdateQuestion
+                    , spellcheck = True
                     }
                 , row [ width fill, spacingXY 10 0 ]
                     [ Input.button
@@ -263,9 +263,8 @@ answers model =
         , Font.color <| fontColor model.theme
         , boxShadow model.theme
         ]
-        [ row []
-            [ text "Q: ", text model.question ]
-        , row []
+        [ paragraph [] [ text "Q: ", text model.question ]
+        , paragraph []
             [ text "A: ", text <| answerText model.answer ]
         ]
 

@@ -37,7 +37,7 @@ operator =
 
 scalar : Random.Generator String
 scalar =
-    Random.int -9000000000 9000000000
+    Random.int -90000000 90000000
         |> Random.map String.fromInt
 
 

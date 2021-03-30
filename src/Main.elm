@@ -8,8 +8,12 @@ import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
 import Html exposing (Html, a)
+import Html.Events
 import Icons exposing (github, moon, sun)
+import Json.Decode as Decode
 import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
+import StatementParser exposing (answer)
+import WrittenOutNumber exposing (writeOut)
 
 
 
@@ -72,7 +76,21 @@ update msg model =
             )
 
         SubmitQuestion ->
-            ( { model | answer = Just (Ok "twenty") }, Cmd.none )
+            let
+                parsedAnswer =
+                    case answer model.question of
+                        Just num ->
+                            case writeOut num of
+                                Ok ans ->
+                                    Ok ans
+
+                                _ ->
+                                    Err "writting out errpr"
+
+                        _ ->
+                            Err "parse error"
+            in
+            ( { model | answer = Just parsedAnswer }, Cmd.none )
 
         RandomQuestion ->
             ( { model | question = "what's up homie", answer = Just (Ok "it's just a test") }, Cmd.none )
@@ -80,6 +98,23 @@ update msg model =
 
 
 ---- VIEW ----
+
+
+onEnter : msg -> Element.Attribute msg
+onEnter msg =
+    Element.htmlAttribute
+        (Html.Events.on "keyup"
+            (Decode.field "key" Decode.string
+                |> Decode.andThen
+                    (\key ->
+                        if key == "Enter" then
+                            Decode.succeed msg
+
+                        else
+                            Decode.fail "Not the enter key"
+                    )
+            )
+        )
 
 
 answerText : Maybe (Result String String) -> String
@@ -158,7 +193,10 @@ centralForm model =
                 , spacingXY 0 10
                 , boxShadow model.theme
                 ]
-                [ Input.text [ borderRadius ]
+                [ Input.text
+                    [ borderRadius
+                    , onEnter SubmitQuestion
+                    ]
                     { text = model.question
                     , placeholder = Just (Input.placeholder [] <| text "Ask me a question")
                     , label = Input.labelHidden "What is your algebraic question?"

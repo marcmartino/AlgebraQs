@@ -154,7 +154,7 @@ update msg model =
         UpdateQuestionFromPageChange url ->
             let
                 newQ =
-                    Debug.log "update page parsed" <| questionFromQuery url
+                    questionFromQuery url
             in
             if newQ == "" then
                 ( model, Cmd.none )

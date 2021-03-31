@@ -15,15 +15,10 @@ exampleOperators : Array String
 exampleOperators =
     Array.fromList
         [ "plus"
-        , "+"
         , "minus"
-        , "-"
         , "times"
-        , "*"
         , "multiplied by"
         , "divided by"
-        , "/"
-        , "^"
         ]
 
 
@@ -36,7 +31,7 @@ operator =
 scalar : Random.Generator String
 scalar =
     Random.int -1000000 1000000
-        |> Random.map String.fromInt
+        |> Random.map (writeOut >> Result.withDefault "zero")
 
 
 generateStatement : Random.Generator ExampleStatement
@@ -74,4 +69,4 @@ prettyExampleStatement { scalars, operators } =
                 )
                 scalarOpPairs
     in
-    "What is " ++ String.join " " combinedValues ++ "?"
+    "What is " ++ String.join "" combinedValues ++ "?"

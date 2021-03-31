@@ -2,7 +2,7 @@ import './main.css';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 
-Elm.Main.init({
+const app = Elm.Main.init({
   node: document.getElementById('root')
 });
 
@@ -10,3 +10,17 @@ Elm.Main.init({
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+const setFavicon = (val) => document.getElementById("favicon").setAttribute('href', `/favicon-${val}.ico`)
+
+const initTheme = window.localStorage.getItem('appTheme') || 'light'
+setFavicon(initTheme)
+
+
+app.ports.toggleTheme.subscribe(newTheme => {
+
+  setFavicon(newTheme)
+  window.localStorage.setItem("appTheme", newTheme)
+})
+
+app.ports.receiveStoredTheme.send(initTheme)

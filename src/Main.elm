@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Browser
 import Browser.Navigation as Navigation
@@ -55,12 +55,18 @@ init _ url key =
                     |> Just
     in
     ( { key = key
-      , theme = Dark
+      , theme = Light
       , question = initialQuestion
       , answer = initialAnswer
       }
     , Cmd.none
     )
+
+
+port toggleTheme : String -> Cmd msg
+
+
+port receiveStoredTheme : (String -> msg) -> Sub msg
 
 
 
@@ -70,6 +76,7 @@ init _ url key =
 type Msg
     = NoOp
     | ToggleTheme
+    | SetTheme String
     | UpdateQuestion String
     | SubmitQuestion
     | GenerateRandomQuestion
@@ -131,6 +138,27 @@ update msg model =
                     else
                         Dark
               }
+            , toggleTheme
+                (if model.theme == Dark then
+                    "light"
+
+                 else
+                    "dark"
+                )
+            )
+
+        SetTheme theme ->
+            ( { model
+                | theme =
+                    if theme == "light" then
+                        Light
+
+                    else if theme == "dark" then
+                        Dark
+
+                    else
+                        model.theme
+              }
             , Cmd.none
             )
 
@@ -161,6 +189,11 @@ update msg model =
 
             else
                 ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    receiveStoredTheme SetTheme
 
 
 
@@ -380,7 +413,7 @@ main =
         { view = view
         , init = init
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         , onUrlChange = UpdateQuestionFromPageChange
         , onUrlRequest = always NoOp
         }

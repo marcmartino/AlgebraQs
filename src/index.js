@@ -24,3 +24,7 @@ app.ports.toggleTheme.subscribe(newTheme => {
 })
 
 app.ports.receiveStoredTheme.send(initTheme)
+
+setTimeout(() => {
+  document.querySelector('body').setAttribute("id", 'animatedPage')
+}, 100)

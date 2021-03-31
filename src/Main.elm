@@ -15,7 +15,7 @@ import Icons exposing (github, moon, sun)
 import Json.Decode as Decode
 import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 import Random
-import StatementParser exposing (answer)
+import StatementParser exposing (answer, toNumeralEquation)
 import Url exposing (Url)
 import Url.Builder as UrlBuilder
 import Url.Parser as UrlParser
@@ -351,7 +351,13 @@ answers model =
         , Font.color <| fontColor model.theme
         , boxShadow model.theme
         ]
-        [ paragraph [] [ text "Q: ", text model.question ]
+        [ paragraph []
+            [ text "Q: "
+            , model.question
+                |> toNumeralEquation
+                |> Maybe.withDefault model.question
+                |> text
+            ]
         , paragraph []
             [ text "A: ", text <| capitalize <| answerText model.answer ++ "." ]
         ]

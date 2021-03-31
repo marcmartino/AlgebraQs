@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "06978b803442e05c00eb2f0d0e1c4941",
+    "revision": "45d02cb876b822b2de895584513c95de",
     "url": "//algebraQs.marmar.io/favicon-dark.ico"
   },
   {
-    "revision": "0f727790c4d8f643849747443219b617",
+    "revision": "c66c855a47e5a4b69f6a50fa8bfd4e85",
     "url": "//algebraQs.marmar.io/favicon-light.ico"
   },
   {
@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "//algebraQs.marmar.io/favicon.ico"
   },
   {
-    "revision": "d39b36409bdb4de3956dd24eb660e8aa",
+    "revision": "f1105ee7b49862ebb1709827f4c39d03",
     "url": "//algebraQs.marmar.io/index.html"
   },
   {
@@ -20,12 +20,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "//algebraQs.marmar.io/manifest.json"
   },
   {
-    "revision": "33eca416334a5d92714c",
+    "revision": "abfaaf52201a70ec4132",
     "url": "//algebraQs.marmar.io/static/css/main.2f1bb3c5.chunk.css"
   },
   {
-    "revision": "33eca416334a5d92714c",
-    "url": "//algebraQs.marmar.io/static/js/main.33eca416.chunk.js"
+    "revision": "abfaaf52201a70ec4132",
+    "url": "//algebraQs.marmar.io/static/js/main.abfaaf52.chunk.js"
   },
   {
     "revision": "e3960791863e9f1d954c",

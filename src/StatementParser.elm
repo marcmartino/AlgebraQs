@@ -1,5 +1,6 @@
-module StatementParser exposing (answer)
+module StatementParser exposing (answer, toNumeralEquation)
 
+import Html.Attributes exposing (list)
 import NumberParser exposing (numParser)
 import Parser exposing ((|.), (|=), Parser, keyword, oneOf, run, spaces, succeed, symbol)
 
@@ -82,6 +83,8 @@ statementParser =
         |. oneOf
             [ keyword "What is"
             , keyword "What's"
+            , keyword "what is"
+            , keyword "what's"
             , symbol ""
             ]
         |. oneOf
@@ -145,6 +148,92 @@ answer problem =
 
         Ok (Num num) ->
             Just num
+
+        _ ->
+            Nothing
+
+
+prettyOperator : Operator -> String
+prettyOperator op =
+    case op of
+        Addition ->
+            "+"
+
+        Subtraction ->
+            "-"
+
+        Multiplication ->
+            "×"
+
+        Division ->
+            "÷"
+
+        Exponent ->
+            "^"
+
+
+group : Int -> List a -> List (List a)
+group groupSize list =
+    let
+        nextGroup =
+            List.take groupSize list
+
+        remainingItems =
+            List.drop groupSize list
+
+        remainingSize =
+            List.length remainingItems
+    in
+    if remainingSize > groupSize then
+        nextGroup :: group groupSize remainingItems
+
+    else if remainingSize == 0 then
+        [ nextGroup ]
+
+    else
+        [ nextGroup, remainingItems ]
+
+
+prettyNum : Int -> String
+prettyNum num =
+    abs num
+        |> String.fromInt
+        |> String.reverse
+        |> String.toList
+        |> List.map String.fromChar
+        |> group 3
+        |> List.map (String.join "")
+        |> String.join ","
+        |> String.reverse
+        |> (\pretty ->
+                if num < 0 then
+                    "-" ++ pretty
+
+                else
+                    pretty
+           )
+
+
+toEquation : AlgebraicStatement -> String
+toEquation { x, operation, y } =
+    case y of
+        Num yNum ->
+            String.join " " [ prettyNum x, prettyOperator operation, prettyNum yNum ]
+
+        Statement yStatement ->
+            String.join " " [ prettyNum x, prettyOperator operation, toEquation yStatement ]
+
+
+toNumeralEquation : String -> Maybe String
+toNumeralEquation problem =
+    case run statementParser problem of
+        Ok (Statement stmt) ->
+            toEquation stmt
+                |> Just
+
+        Ok (Num num) ->
+            String.fromInt num
+                |> Just
 
         _ ->
             Nothing

@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Browser
+import Browser.Navigation as Navigation
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -15,6 +16,10 @@ import Json.Decode as Decode
 import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 import Random
 import StatementParser exposing (answer)
+import Url exposing (Url)
+import Url.Builder as UrlBuilder
+import Url.Parser as UrlParser
+import Url.Parser.Query as QueryParser
 import WrittenOutNumber exposing (writeOut)
 
 
@@ -24,16 +29,35 @@ import WrittenOutNumber exposing (writeOut)
 
 type alias Model =
     { theme : Theme
+    , key : Navigation.Key
     , question : String
     , answer : Maybe (Result String String)
     }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( { theme = Dark
-      , question = ""
-      , answer = Nothing
+init : () -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
+init _ url key =
+    let
+        initialQuestion : String
+        initialQuestion =
+            questionFromQuery url
+
+        initialAnswer =
+            if initialQuestion == "" then
+                Nothing
+
+            else
+                answer initialQuestion
+                    |> Maybe.withDefault 0
+                    |> writeOut
+                    |> Result.withDefault "in;itial default"
+                    |> Ok
+                    |> Just
+    in
+    ( { key = key
+      , theme = Dark
+      , question = initialQuestion
+      , answer = initialAnswer
       }
     , Cmd.none
     )
@@ -50,6 +74,17 @@ type Msg
     | SubmitQuestion
     | GenerateRandomQuestion
     | SubmitRandomQuestion ExampleStatement
+    | UpdateQuestionFromPageChange Url.Url
+
+
+questionFromQuery : Url.Url -> String
+questionFromQuery url =
+    case UrlParser.parse (UrlParser.query (QueryParser.string "q")) url of
+        Just (Just question) ->
+            question
+
+        _ ->
+            ""
 
 
 parseAnswer : String -> Result String String
@@ -65,6 +100,12 @@ parseAnswer q =
 
         _ ->
             Err "parse error"
+
+
+pushNewQuestion : Navigation.Key -> String -> Cmd msg
+pushNewQuestion key question =
+    UrlBuilder.relative [] [ UrlBuilder.string "q" question ]
+        |> Navigation.pushUrl key
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -94,7 +135,9 @@ update msg model =
             )
 
         SubmitQuestion ->
-            ( { model | answer = Just <| parseAnswer <| model.question }, Cmd.none )
+            ( { model | answer = Just <| parseAnswer <| model.question }
+            , pushNewQuestion model.key model.question
+            )
 
         GenerateRandomQuestion ->
             ( model, Random.generate SubmitRandomQuestion generateStatement )
@@ -104,7 +147,20 @@ update msg model =
                 newQ =
                     prettyExampleStatement exampleQ
             in
-            ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }, Cmd.none )
+            ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }
+            , pushNewQuestion model.key newQ
+            )
+
+        UpdateQuestionFromPageChange url ->
+            let
+                newQ =
+                    Debug.log "update page parsed" <| questionFromQuery url
+            in
+            if newQ == "" then
+                ( model, Cmd.none )
+
+            else
+                ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }, Cmd.none )
 
 
 
@@ -151,19 +207,18 @@ isJust maybe =
             False
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    layout
-        [ Background.color <| backgroundColor model.theme
-        , Font.family [ Font.typeface "Fira Sans", Font.sansSerif ]
+    { title = "Algebra Qs"
+    , body =
+        [ layout
+            [ Background.color <| backgroundColor model.theme
+            , Font.family [ Font.typeface "Fira Sans", Font.sansSerif ]
+            ]
+          <|
+            dashboard model
         ]
-    <|
-        dashboard model
-
-
-edges : { top : number, right : number, bottom : number, left : number }
-edges =
-    { top = 0, right = 0, bottom = 0, left = 0 }
+    }
 
 
 darkToggle : Theme -> Element Msg
@@ -321,9 +376,11 @@ dashboard model =
 
 main : Program () Model Msg
 main =
-    Browser.element
+    Browser.application
         { view = view
-        , init = \_ -> init
+        , init = init
         , update = update
         , subscriptions = always Sub.none
+        , onUrlChange = UpdateQuestionFromPageChange
+        , onUrlRequest = always NoOp
         }

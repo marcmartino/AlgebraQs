@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "45d02cb876b822b2de895584513c95de",
+    "revision": "c66c855a47e5a4b69f6a50fa8bfd4e85",
     "url": "//algebraQs.marmar.io/favicon-dark.ico"
   },
   {
-    "revision": "c66c855a47e5a4b69f6a50fa8bfd4e85",
+    "revision": "45d02cb876b822b2de895584513c95de",
     "url": "//algebraQs.marmar.io/favicon-light.ico"
   },
   {

@@ -232,7 +232,7 @@ toNumeralEquation problem =
                 |> Just
 
         Ok (Num num) ->
-            String.fromInt num
+            prettyNum num
                 |> Just
 
         _ ->

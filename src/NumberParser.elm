@@ -17,7 +17,8 @@ singleDigitParsers =
 numParser : Parser Int
 numParser =
     oneOf
-        [ succeed negate
+        [ writtenOutNumParser
+        , succeed negate
             |. oneOf
                 [ symbol "-"
                 , succeed ()
@@ -25,11 +26,10 @@ numParser =
                     |. spaces
                 ]
             |= oneOf
-                [ int
-                , writtenOutNumParser
+                [ writtenOutNumParser
+                , int
                 ]
         , int
-        , writtenOutNumParser
         ]
 
 
@@ -57,44 +57,43 @@ twoDigitNumParser =
         ]
 
 
-subsequentHundredParser : Int -> Parser Int
-subsequentHundredParser n =
+singleDigitHundreds : Parser Int
+singleDigitHundreds =
     let
-        checkForAnd : Int -> Parser Int
-        checkForAnd x =
-            succeed x
-                |. spaces
-                |. oneOf
-                    [ succeed ()
-                        |. keyword "and"
-                        |. spaces
-                    , symbol ""
-                    ]
+        hundredAnds : Parser Int
+        hundredAnds =
+            oneOf <| mapSingleDigitNames (\( num, name ) -> Parser.map (always (num * 100)) (symbol (name ++ " hundred and")))
+
+        hundreds =
+            oneOf <| mapSingleDigitNames (\( num, name ) -> Parser.map (always (num * 100)) (symbol (name ++ " hundred")))
     in
-    succeed identity
-        |. spaces
-        |= oneOf
-            [ Parser.map (always <| n * 100) (symbol "hundred")
-                |> Parser.andThen checkForAnd
-                |> Parser.andThen
-                    (\x ->
-                        succeed ((+) x)
-                            |= oneOf
+    oneOf
+        [ hundredAnds
+        , hundreds
+        ]
+        |> Parser.andThen
+            (\n ->
+                oneOf
+                    [ succeed identity
+                        |. spaces
+                        |= Parser.map ((+) n)
+                            (oneOf
                                 [ twoDigitNumParser
                                 , oneOf singleDigitParsers
                                 , Parser.map (always 0) (symbol "")
                                 ]
-                    )
-            , Parser.map (always n) (symbol "")
-            ]
+                            )
+                    , Parser.map (always n) (symbol "")
+                    ]
+            )
 
 
 writtenOutNumParser : Parser Int
 writtenOutNumParser =
     oneOf
         [ twoDigitNumParser
+        , singleDigitHundreds
         , oneOf singleDigitParsers
-            |> Parser.andThen subsequentHundredParser
         ]
         |> Parser.andThen orderOfMagnitudeParser
         |> Parser.andThen writtenOutNumRecurseParser

@@ -47,11 +47,7 @@ init _ url key =
                 Nothing
 
             else
-                answer initialQuestion
-                    |> Maybe.withDefault 0
-                    |> writeOut
-                    |> Result.withDefault "in;itial default"
-                    |> Ok
+                parseAnswer initialQuestion
                     |> Just
     in
     ( { key = key
@@ -103,10 +99,10 @@ parseAnswer q =
                     Ok ans
 
                 _ ->
-                    Err "writting out error"
+                    Err "Answer too large to display"
 
         _ ->
-            Err "parse error"
+            Err "Parse error"
 
 
 pushNewQuestion : Navigation.Key -> String -> Cmd msg
@@ -217,17 +213,17 @@ onEnter msg =
         )
 
 
-answerText : Maybe (Result String String) -> String
-answerText answerObj =
+answerText : Theme -> Maybe (Result String String) -> Element msg
+answerText theme answerObj =
     case answerObj of
         Nothing ->
-            ""
+            text "Answer Not Found"
 
         Just (Err err) ->
-            "Err- " ++ err
+            el [ theme |> Palette.buttonColor |> Font.color ] (text err)
 
         Just (Ok answer) ->
-            answer
+            answer ++ "." |> capitalize |> text
 
 
 isJust : Maybe a -> Bool
@@ -351,15 +347,14 @@ answers model =
         , Font.color <| fontColor model.theme
         , boxShadow model.theme
         ]
-        [ paragraph []
-            [ text "Q: "
-            , model.question
+        [ paragraph [ Font.underline ]
+            [ model.question
                 |> toNumeralEquation
                 |> Maybe.withDefault model.question
                 |> text
             ]
         , paragraph []
-            [ text "A: ", text <| capitalize <| answerText model.answer ++ "." ]
+            [ answerText model.theme model.answer ]
         ]
 
 

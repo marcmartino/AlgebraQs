@@ -15,12 +15,12 @@ singleDigitsList =
 
 teenDigitsList : List String
 teenDigitsList =
-    [ "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "ninteen" ]
+    [ "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" ]
 
 
 tensDigitList : List String
 tensDigitList =
-    [ "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "nintey" ]
+    [ "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" ]
 
 
 groupingNamesList : List String

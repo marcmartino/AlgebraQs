@@ -2,8 +2,11 @@ import './main.css';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 
+const initTheme = window.localStorage.getItem('appTheme') || 'light'
+
 const app = Elm.Main.init({
-  node: document.getElementById('root')
+  node: document.getElementById('root'),
+  flags: initTheme
 });
 
 // If you want your app to work offline and load faster, you can change
@@ -13,7 +16,6 @@ serviceWorker.unregister();
 
 const setFavicon = (val) => document.getElementById("favicon").setAttribute('href', `/favicon-${val}.ico`)
 
-const initTheme = window.localStorage.getItem('appTheme') || 'light'
 setFavicon(initTheme)
 
 
@@ -22,8 +24,6 @@ app.ports.toggleTheme.subscribe(newTheme => {
   setFavicon(newTheme)
   window.localStorage.setItem("appTheme", newTheme)
 })
-
-app.ports.receiveStoredTheme.send(initTheme)
 
 setTimeout(() => {
   document.querySelector('body').setAttribute("id", 'animatedPage')

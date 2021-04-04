@@ -35,8 +35,8 @@ type alias Model =
     }
 
 
-init : () -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
-init _ url key =
+init : String -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
+init themeName url key =
     let
         initialQuestion : String
         initialQuestion =
@@ -49,9 +49,16 @@ init _ url key =
             else
                 parseAnswer initialQuestion
                     |> Just
+
+        initialTheme =
+            if themeName == "dark" then
+                Dark
+
+            else
+                Light
     in
     ( { key = key
-      , theme = Light
+      , theme = initialTheme
       , question = initialQuestion
       , answer = initialAnswer
       }
@@ -62,9 +69,6 @@ init _ url key =
 port toggleTheme : String -> Cmd msg
 
 
-port receiveStoredTheme : (String -> msg) -> Sub msg
-
-
 
 ---- UPDATE ----
 
@@ -72,7 +76,6 @@ port receiveStoredTheme : (String -> msg) -> Sub msg
 type Msg
     = NoOp
     | ToggleTheme
-    | SetTheme String
     | UpdateQuestion String
     | SubmitQuestion
     | GenerateRandomQuestion
@@ -143,21 +146,6 @@ update msg model =
                 )
             )
 
-        SetTheme theme ->
-            ( { model
-                | theme =
-                    if theme == "light" then
-                        Light
-
-                    else if theme == "dark" then
-                        Dark
-
-                    else
-                        model.theme
-              }
-            , Cmd.none
-            )
-
         SubmitQuestion ->
             ( { model | answer = Just <| parseAnswer <| model.question }
             , pushNewQuestion model.key model.question
@@ -185,11 +173,6 @@ update msg model =
 
             else
                 ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }, Cmd.none )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    receiveStoredTheme SetTheme
 
 
 
@@ -408,13 +391,13 @@ dashboard model =
 ---- PROGRAM ----
 
 
-main : Program () Model Msg
+main : Program String Model Msg
 main =
     Browser.application
         { view = view
         , init = init
         , update = update
-        , subscriptions = subscriptions
+        , subscriptions = always Sub.none
         , onUrlChange = UpdateQuestionFromPageChange
         , onUrlRequest = always NoOp
         }

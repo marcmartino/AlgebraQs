@@ -9,7 +9,7 @@ import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
 import ExampleStatementGenerator exposing (ExampleStatement, generateStatement, prettyExampleStatement)
-import Html exposing (Html, a)
+import Html exposing (Html)
 import Html.Events
 import Icons exposing (github, moon, sun)
 import Json.Decode as Decode
@@ -27,16 +27,24 @@ import WrittenOutNumber exposing (writeOut)
 ---- MODEL ----
 
 
+type alias InitFlags =
+    { theme : String
+    , height : Int
+    , width : Int
+    }
+
+
 type alias Model =
-    { theme : Theme
+    { device : Device
+    , theme : Theme
     , key : Navigation.Key
     , question : String
     , answer : Maybe (Result String String)
     }
 
 
-init : String -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
-init themeName url key =
+init : InitFlags -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
+init flags url key =
     let
         initialQuestion : String
         initialQuestion =
@@ -51,7 +59,7 @@ init themeName url key =
                     |> Just
 
         initialTheme =
-            if themeName == "dark" then
+            if flags.theme == "dark" then
                 Dark
 
             else
@@ -61,6 +69,7 @@ init themeName url key =
       , theme = initialTheme
       , question = initialQuestion
       , answer = initialAnswer
+      , device = classifyDevice { height = flags.height, width = flags.width }
       }
     , Cmd.none
     )
@@ -265,11 +274,11 @@ centralForm model =
 
         inputForm =
             column
-                [ padding 10
-                , Background.color <| secondBackgroundColor model.theme
+                [ Background.color <| secondBackgroundColor model.theme
                 , borderRadius
                 , spacingXY 0 10
                 , boxShadow model.theme
+                , padding 10
                 ]
                 [ Input.multiline
                     [ borderRadius
@@ -304,14 +313,24 @@ centralForm model =
                         { onPress = Just GenerateRandomQuestion, label = el [ centerX ] <| text "Random" }
                     ]
                 ]
+
+        formPositioning =
+            case model.device.class of
+                Phone ->
+                    [ centerX
+                    , width fill
+                    , spacing 15
+                    , paddingEach { top = 20, right = 0, bottom = 0, left = 0 }
+                    ]
+
+                _ ->
+                    [ centerX
+                    , centerY
+                    , width fill
+                    , spacing 10
+                    ]
     in
-    textColumn
-        [ centerX
-        , centerY
-        , paddingXY 0 20
-        , spacingXY 0 10
-        , width <| px 400
-        ]
+    textColumn formPositioning
         [ header
         , inputForm
         ]
@@ -319,17 +338,29 @@ centralForm model =
 
 answers : Model -> Element msg
 answers model =
+    let
+        positioning =
+            case model.device.class of
+                Phone ->
+                    [ padding 10
+                    ]
+
+                _ ->
+                    [ padding 10
+                    , centerY
+                    ]
+    in
     column
-        [ centerX
-        , centerY
-        , width <| px 400
-        , padding 10
-        , Background.color <| secondBackgroundColor model.theme
-        , borderRadius
-        , spacingXY 0 10
-        , Font.color <| fontColor model.theme
-        , boxShadow model.theme
-        ]
+        (List.append positioning
+            [ centerX
+            , width fill
+            , Background.color <| secondBackgroundColor model.theme
+            , borderRadius
+            , spacingXY 0 10
+            , Font.color <| fontColor model.theme
+            , boxShadow model.theme
+            ]
+        )
         [ paragraph [ Font.underline ]
             [ model.question
                 |> toNumeralEquation
@@ -372,17 +403,35 @@ footer model =
 
 dashboard : Model -> Element Msg
 dashboard model =
+    let
+        contentPositioning =
+            case model.device.class of
+                Phone ->
+                    [ width fill
+                    , paddingXY 15 0
+                    , spacing 15
+                    ]
+
+                _ ->
+                    [ width <| px 400
+                    , centerX
+                    , paddingXY 0 60
+                    , spacing 25
+                    ]
+    in
     column
         [ height fill
         , width fill
         ]
         [ darkToggle model.theme
-        , centralForm model
-        , if isJust model.answer then
-            answers model
+        , textColumn contentPositioning
+            [ centralForm model
+            , if isJust model.answer then
+                answers model
 
-          else
-            text ""
+              else
+                text ""
+            ]
         , footer model
         ]
 
@@ -391,7 +440,7 @@ dashboard model =
 ---- PROGRAM ----
 
 
-main : Program String Model Msg
+main : Program InitFlags Model Msg
 main =
     Browser.application
         { view = view

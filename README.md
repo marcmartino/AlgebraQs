@@ -11,7 +11,7 @@ Available to view at https://algebraQs.marmar.io
 
 ### Points of Interest
 
-As this is a project created for the sake of learning, not actually for utility sake I've compiled a list of bits that were relatively new to me as someone making their first large(ish) elm app
+As this is a project created for the sake of learning, not actually for utility sake so to that end here's a list of bits that were relatively new to me as someone making their first large(ish) elm app.
 
 - `elm/parser` turned out to be fantastic for parsing the input string and turning it into an object representing the algebraic statement that the user wants solved. This was solvable without the use of back tracking.
 - `mdgriffith/elm-ui` has been a fascinating library for doing layouts with much more clarity/sanity than standard html/css.

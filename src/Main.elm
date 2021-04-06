@@ -9,12 +9,11 @@ import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
 import ExampleStatementGenerator exposing (ExampleStatement, generateStatement, prettyExampleStatement)
-import Html exposing (Html, a)
-import Html.Attributes exposing (disabled)
+import Html exposing (Html)
 import Html.Events
 import Icons exposing (github, moon, sun)
 import Json.Decode as Decode
-import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
+import Palette exposing (Theme(..), backgroundColor, borderRadius, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 import Random
 import StatementParser exposing (answer, toNumeralEquation)
 import Url exposing (Url)
@@ -28,16 +27,24 @@ import WrittenOutNumber exposing (writeOut)
 ---- MODEL ----
 
 
+type alias InitFlags =
+    { theme : String
+    , height : Int
+    , width : Int
+    }
+
+
 type alias Model =
-    { theme : Theme
+    { device : Device
+    , theme : Theme
     , key : Navigation.Key
     , question : String
     , answer : Maybe (Result String String)
     }
 
 
-init : String -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
-init themeName url key =
+init : InitFlags -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
+init flags url key =
     let
         initialQuestion : String
         initialQuestion =
@@ -52,7 +59,7 @@ init themeName url key =
                     |> Just
 
         initialTheme =
-            if themeName == "dark" then
+            if flags.theme == "dark" then
                 Dark
 
             else
@@ -62,6 +69,7 @@ init themeName url key =
       , theme = initialTheme
       , question = initialQuestion
       , answer = initialAnswer
+      , device = classifyDevice { height = flags.height, width = flags.width }
       }
     , Cmd.none
     )
@@ -263,20 +271,24 @@ centralForm model =
     let
         header =
             el
-                [ centerX
-                , Region.heading 1
+                [ Region.heading 1
                 , Font.size 24
                 , Font.color <| fontColor model.theme
                 ]
                 (text "Alg Qs")
 
+        buttonStyles =
+            [ width fill
+            , borderRadius
+            , padding 5
+            ]
+
         inputForm =
             column
-                [ padding 10
-                , Background.color <| secondBackgroundColor model.theme
+                [ Background.color <| secondBackgroundColor model.theme
                 , borderRadius
                 , spacingXY 0 10
-                , boxShadow model.theme
+                , padding 10
                 ]
                 [ Input.multiline
                     [ borderRadius
@@ -288,37 +300,45 @@ centralForm model =
                     , onChange = UpdateQuestion
                     , spellcheck = True
                     }
-                , row [ width fill, spacingXY 10 0 ]
+                , row [ width fill, spacing 10 ]
                     [ Input.button
-                        [ width fill
-                        , Background.color <| ctaColor model.theme
-                        , borderRadius
-                        , padding 5
-                        , alignLeft
-                        , Element.focused
-                            [ ctaFocusedColor ]
-                        ]
+                        (List.concat
+                            [ buttonStyles
+                            , [ Background.color <| ctaColor model.theme
+                              , Element.focused
+                                    [ ctaFocusedColor ]
+                              ]
+                            ]
+                        )
                         { onPress = Just SubmitQuestion, label = el [ centerX ] <| text "Go" }
                     , Input.button
-                        [ width fill
-                        , Background.color <| buttonColor model.theme
-                        , borderRadius
-                        , padding 5
-                        , alignRight
-                        , Element.focused
-                            [ buttonFocusedColor ]
-                        ]
+                        (List.concat
+                            [ buttonStyles
+                            , [ Background.color <| buttonColor model.theme
+                              , Element.focused
+                                    [ buttonFocusedColor ]
+                              ]
+                            ]
+                        )
                         { onPress = Just GenerateRandomQuestion, label = el [ centerX ] <| text "Random" }
                     ]
                 ]
+
+        formPositioning =
+            case model.device.class of
+                Phone ->
+                    [ width fill
+                    , spacing 15
+                    , paddingEach { top = 20, right = 0, bottom = 0, left = 0 }
+                    ]
+
+                _ ->
+                    [ centerY
+                    , width fill
+                    , spacing 10
+                    ]
     in
-    textColumn
-        [ centerX
-        , centerY
-        , paddingXY 0 20
-        , spacingXY 0 10
-        , width <| px 400
-        ]
+    textColumn formPositioning
         [ header
         , inputForm
         ]
@@ -328,14 +348,12 @@ answers : Model -> Element msg
 answers model =
     column
         [ centerX
-        , centerY
-        , width <| px 400
         , padding 10
+        , width fill
         , Background.color <| secondBackgroundColor model.theme
         , borderRadius
         , spacingXY 0 10
         , Font.color <| fontColor model.theme
-        , boxShadow model.theme
         ]
         [ paragraph [ Font.underline ]
             [ model.question
@@ -361,7 +379,6 @@ footer : Model -> Element msg
 footer model =
     row
         [ alignBottom
-        , centerX
         , width fill
         , padding 20
         , Font.color <| fontColor model.theme
@@ -379,17 +396,35 @@ footer model =
 
 dashboard : Model -> Element Msg
 dashboard model =
+    let
+        contentPositioning =
+            case model.device.class of
+                Phone ->
+                    [ width fill
+                    , paddingEach { top = 0, right = 15, bottom = 40, left = 15 }
+                    , spacing 15
+                    ]
+
+                _ ->
+                    [ width <| px 400
+                    , centerX
+                    , paddingXY 0 60
+                    , spacing 10
+                    ]
+    in
     column
         [ height fill
         , width fill
         ]
         [ darkToggle model.theme
-        , centralForm model
-        , if isJust model.answer then
-            answers model
+        , textColumn contentPositioning
+            [ centralForm model
+            , if isJust model.answer then
+                answers model
 
-          else
-            text ""
+              else
+                text ""
+            ]
         , footer model
         ]
 
@@ -398,7 +433,7 @@ dashboard model =
 ---- PROGRAM ----
 
 
-main : Program String Model Msg
+main : Program InitFlags Model Msg
 main =
     Browser.application
         { view = view

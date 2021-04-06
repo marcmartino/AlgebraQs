@@ -6,7 +6,7 @@ const initTheme = window.localStorage.getItem('appTheme') || 'light'
 
 const app = Elm.Main.init({
   node: document.getElementById('root'),
-  flags: initTheme
+  flags: { theme: initTheme, height: window.innerHeight, width: window.innerWidth }
 });
 
 // If you want your app to work offline and load faster, you can change
@@ -20,7 +20,6 @@ setFavicon(initTheme)
 
 
 app.ports.toggleTheme.subscribe(newTheme => {
-
   setFavicon(newTheme)
   window.localStorage.setItem("appTheme", newTheme)
 })

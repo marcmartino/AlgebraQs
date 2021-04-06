@@ -9,6 +9,7 @@
   "scripts": {
     "start": "elm-app start",
     "test": "elm-test",
+    "netlify-build": "rm elmapp.config.js; npm run build",
     "build": "elm-app build"
   },
   "repository": {

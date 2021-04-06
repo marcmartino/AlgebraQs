@@ -11,7 +11,7 @@ import Element.Region as Region
 import ExampleStatementGenerator exposing (ExampleStatement, generateStatement, prettyExampleStatement)
 import Html exposing (Html)
 import Html.Events
-import Icons exposing (github, moon, sun)
+import Icons exposing (github, moon, send, sun)
 import Json.Decode as Decode
 import Palette exposing (Theme(..), backgroundColor, borderRadius, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 import Random
@@ -279,8 +279,17 @@ centralForm model =
 
         buttonStyles =
             [ width fill
+            , height fill
             , borderRadius
             , padding 5
+            , Font.size 16
+            , Font.color Palette.prussianBlue
+            , Border.shadow
+                { offset = ( 0, 2 )
+                , size = 0
+                , blur = 1
+                , color = rgba255 0 0 0 0.5
+                }
             ]
 
         inputForm =
@@ -293,6 +302,8 @@ centralForm model =
                 [ Input.multiline
                     [ borderRadius
                     , onEnter SubmitQuestion
+                    , Font.color <| fontColor model.theme
+                    , Background.color <| backgroundColor model.theme
                     ]
                     { text = model.question
                     , placeholder = Just (Input.placeholder [] <| text "Ask me a question")
@@ -305,22 +316,46 @@ centralForm model =
                         (List.concat
                             [ buttonStyles
                             , [ Background.color <| ctaColor model.theme
-                              , Element.focused
-                                    [ ctaFocusedColor ]
+                              , Element.focused []
+                              , Element.mouseOver [ ctaFocusedColor ]
+                              , Element.mouseDown
+                                    [ Border.shadow
+                                        { offset = ( 0, 0 )
+                                        , size = 0
+                                        , blur = 0
+                                        , color = rgb255 0 0 0
+                                        }
+                                    ]
                               ]
                             ]
                         )
-                        { onPress = Just SubmitQuestion, label = el [ centerX ] <| text "Go" }
+                        { onPress = Just SubmitQuestion
+                        , label =
+                            row [ centerX ]
+                                [ el [] (Element.html send)
+                                , el [] <| text "Go"
+                                ]
+                        }
                     , Input.button
                         (List.concat
                             [ buttonStyles
                             , [ Background.color <| buttonColor model.theme
-                              , Element.focused
-                                    [ buttonFocusedColor ]
+                              , Element.focused []
+                              , Element.mouseOver [ buttonFocusedColor ]
+                              , Element.mouseDown
+                                    [ Border.shadow
+                                        { offset = ( 0, 0 )
+                                        , size = 0
+                                        , blur = 0
+                                        , color = rgb255 0 0 0
+                                        }
+                                    ]
                               ]
                             ]
                         )
-                        { onPress = Just GenerateRandomQuestion, label = el [ centerX ] <| text "Random" }
+                        { onPress = Just GenerateRandomQuestion
+                        , label = el [ centerX ] <| text "Random"
+                        }
                     ]
                 ]
 

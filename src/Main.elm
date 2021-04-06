@@ -10,6 +10,7 @@ import Element.Input as Input
 import Element.Region as Region
 import ExampleStatementGenerator exposing (ExampleStatement, generateStatement, prettyExampleStatement)
 import Html exposing (Html, a)
+import Html.Attributes exposing (disabled)
 import Html.Events
 import Icons exposing (github, moon, sun)
 import Json.Decode as Decode
@@ -147,7 +148,9 @@ update msg model =
             )
 
         SubmitQuestion ->
-            ( { model | answer = Just <| parseAnswer <| model.question }
+            ( { model
+                | answer = Just <| parseAnswer <| model.question
+              }
             , pushNewQuestion model.key model.question
             )
 

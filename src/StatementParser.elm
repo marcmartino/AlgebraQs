@@ -139,9 +139,21 @@ simplify simps alg =
                     simplify otherSimps stmt
 
 
+prepQuestion : String -> String
+prepQuestion =
+    String.trim
+        >> (\str ->
+                if String.endsWith "?" str then
+                    str
+
+                else
+                    str ++ "?"
+           )
+
+
 answer : String -> Maybe Int
 answer problem =
-    case run statementParser problem of
+    case run statementParser <| prepQuestion <| problem of
         Ok (Statement stmt) ->
             stmt
                 |> simplify operatorSimplifiers
@@ -226,7 +238,7 @@ toEquation { x, operation, y } =
 
 toNumeralEquation : String -> Maybe String
 toNumeralEquation problem =
-    case run statementParser problem of
+    case run statementParser <| prepQuestion problem of
         Ok (Statement stmt) ->
             toEquation stmt
                 |> Just

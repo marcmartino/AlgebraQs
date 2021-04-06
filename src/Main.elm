@@ -13,7 +13,7 @@ import Html exposing (Html)
 import Html.Events
 import Icons exposing (github, moon, sun)
 import Json.Decode as Decode
-import Palette exposing (Theme(..), backgroundColor, borderRadius, boxShadow, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
+import Palette exposing (Theme(..), backgroundColor, borderRadius, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
 import Random
 import StatementParser exposing (answer, toNumeralEquation)
 import Url exposing (Url)
@@ -117,8 +117,8 @@ parseAnswer q =
             Err "Parse error"
 
 
-pushNewQuestion : Navigation.Key -> String -> Cmd msg
-pushNewQuestion key question =
+pushNewQuestionUrl : Navigation.Key -> String -> Cmd msg
+pushNewQuestionUrl key question =
     UrlBuilder.relative [] [ UrlBuilder.string "q" question ]
         |> Navigation.pushUrl key
 
@@ -156,8 +156,11 @@ update msg model =
             )
 
         SubmitQuestion ->
-            ( { model | answer = Just <| parseAnswer <| model.question }
-            , pushNewQuestion model.key model.question
+            ( { model
+                | question = String.trim model.question
+                , answer = Just <| parseAnswer <| model.question
+              }
+            , pushNewQuestionUrl model.key <| String.trim model.question
             )
 
         GenerateRandomQuestion ->
@@ -168,8 +171,11 @@ update msg model =
                 newQ =
                     prettyExampleStatement exampleQ
             in
-            ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }
-            , pushNewQuestion model.key newQ
+            ( { model
+                | question = newQ
+                , answer = Just <| parseAnswer <| newQ
+              }
+            , pushNewQuestionUrl model.key newQ
             )
 
         UpdateQuestionFromPageChange url ->

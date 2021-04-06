@@ -109,8 +109,8 @@ parseAnswer q =
             Err "Parse error"
 
 
-pushNewQuestion : Navigation.Key -> String -> Cmd msg
-pushNewQuestion key question =
+pushNewQuestionUrl : Navigation.Key -> String -> Cmd msg
+pushNewQuestionUrl key question =
     UrlBuilder.relative [] [ UrlBuilder.string "q" question ]
         |> Navigation.pushUrl key
 
@@ -149,9 +149,10 @@ update msg model =
 
         SubmitQuestion ->
             ( { model
-                | answer = Just <| parseAnswer <| model.question
+                | question = String.trim model.question
+                , answer = Just <| parseAnswer <| model.question
               }
-            , pushNewQuestion model.key model.question
+            , pushNewQuestionUrl model.key <| String.trim model.question
             )
 
         GenerateRandomQuestion ->
@@ -162,8 +163,11 @@ update msg model =
                 newQ =
                     prettyExampleStatement exampleQ
             in
-            ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }
-            , pushNewQuestion model.key newQ
+            ( { model
+                | question = newQ
+                , answer = Just <| parseAnswer <| newQ
+              }
+            , pushNewQuestionUrl model.key newQ
             )
 
         UpdateQuestionFromPageChange url ->

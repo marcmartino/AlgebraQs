@@ -1,7 +1,7 @@
 {
   "main.css": "//algebraQs.marmar.io/static/css/main.9e055e96.chunk.css",
-  "main.js": "//algebraQs.marmar.io/static/js/main.af6b4302.chunk.js",
-  "main.js.map": "//algebraQs.marmar.io/static/js/main.af6b4302.chunk.js.map",
+  "main.js": "//algebraQs.marmar.io/static/js/main.108d4afa.chunk.js",
+  "main.js.map": "//algebraQs.marmar.io/static/js/main.108d4afa.chunk.js.map",
   "runtime~main.js": "//algebraQs.marmar.io/static/js/runtime~main.e3960791.js",
   "runtime~main.js.map": "//algebraQs.marmar.io/static/js/runtime~main.e3960791.js.map",
   "vendors~main.js": "//algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js",
@@ -12,5 +12,5 @@
   "favicon.ico": "//algebraQs.marmar.io/favicon.ico",
   "index.html": "//algebraQs.marmar.io/index.html",
   "manifest.json": "//algebraQs.marmar.io/manifest.json",
-  "precache-manifest.a728b69c0776a518b99d70ec3b665f5d.js": "//algebraQs.marmar.io/precache-manifest.a728b69c0776a518b99d70ec3b665f5d.js"
+  "precache-manifest.7231d47af8477b3474610bab0a10a80a.js": "//algebraQs.marmar.io/precache-manifest.7231d47af8477b3474610bab0a10a80a.js"
 }

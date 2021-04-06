@@ -265,19 +265,23 @@ centralForm model =
     let
         header =
             el
-                [ centerX
-                , Region.heading 1
+                [ Region.heading 1
                 , Font.size 24
                 , Font.color <| fontColor model.theme
                 ]
                 (text "Alg Qs")
+
+        buttonStyles =
+            [ width fill
+            , borderRadius
+            , padding 5
+            ]
 
         inputForm =
             column
                 [ Background.color <| secondBackgroundColor model.theme
                 , borderRadius
                 , spacingXY 0 10
-                , boxShadow model.theme
                 , padding 10
                 ]
                 [ Input.multiline
@@ -290,26 +294,26 @@ centralForm model =
                     , onChange = UpdateQuestion
                     , spellcheck = True
                     }
-                , row [ width fill, spacingXY 10 0 ]
+                , row [ width fill, spacing 10 ]
                     [ Input.button
-                        [ width fill
-                        , Background.color <| ctaColor model.theme
-                        , borderRadius
-                        , padding 5
-                        , alignLeft
-                        , Element.focused
-                            [ ctaFocusedColor ]
-                        ]
+                        (List.concat
+                            [ buttonStyles
+                            , [ Background.color <| ctaColor model.theme
+                              , Element.focused
+                                    [ ctaFocusedColor ]
+                              ]
+                            ]
+                        )
                         { onPress = Just SubmitQuestion, label = el [ centerX ] <| text "Go" }
                     , Input.button
-                        [ width fill
-                        , Background.color <| buttonColor model.theme
-                        , borderRadius
-                        , padding 5
-                        , alignRight
-                        , Element.focused
-                            [ buttonFocusedColor ]
-                        ]
+                        (List.concat
+                            [ buttonStyles
+                            , [ Background.color <| buttonColor model.theme
+                              , Element.focused
+                                    [ buttonFocusedColor ]
+                              ]
+                            ]
+                        )
                         { onPress = Just GenerateRandomQuestion, label = el [ centerX ] <| text "Random" }
                     ]
                 ]
@@ -317,15 +321,13 @@ centralForm model =
         formPositioning =
             case model.device.class of
                 Phone ->
-                    [ centerX
-                    , width fill
+                    [ width fill
                     , spacing 15
                     , paddingEach { top = 20, right = 0, bottom = 0, left = 0 }
                     ]
 
                 _ ->
-                    [ centerX
-                    , centerY
+                    [ centerY
                     , width fill
                     , spacing 10
                     ]
@@ -338,29 +340,15 @@ centralForm model =
 
 answers : Model -> Element msg
 answers model =
-    let
-        positioning =
-            case model.device.class of
-                Phone ->
-                    [ padding 10
-                    ]
-
-                _ ->
-                    [ padding 10
-                    , centerY
-                    ]
-    in
     column
-        (List.append positioning
-            [ centerX
-            , width fill
-            , Background.color <| secondBackgroundColor model.theme
-            , borderRadius
-            , spacingXY 0 10
-            , Font.color <| fontColor model.theme
-            , boxShadow model.theme
-            ]
-        )
+        [ centerX
+        , padding 10
+        , width fill
+        , Background.color <| secondBackgroundColor model.theme
+        , borderRadius
+        , spacingXY 0 10
+        , Font.color <| fontColor model.theme
+        ]
         [ paragraph [ Font.underline ]
             [ model.question
                 |> toNumeralEquation
@@ -385,7 +373,6 @@ footer : Model -> Element msg
 footer model =
     row
         [ alignBottom
-        , centerX
         , width fill
         , padding 20
         , Font.color <| fontColor model.theme
@@ -408,7 +395,7 @@ dashboard model =
             case model.device.class of
                 Phone ->
                     [ width fill
-                    , paddingXY 15 0
+                    , paddingEach { top = 0, right = 15, bottom = 40, left = 15 }
                     , spacing 15
                     ]
 
@@ -416,7 +403,7 @@ dashboard model =
                     [ width <| px 400
                     , centerX
                     , paddingXY 0 60
-                    , spacing 25
+                    , spacing 10
                     ]
     in
     column

@@ -1,6 +1,7 @@
 module Icons exposing
     ( github
     , moon
+    , refreshCw
     , send
     , sun
     )
@@ -36,6 +37,15 @@ moon : Html msg
 moon =
     svgFeatherIcon "moon"
         [ Svg.path [ d "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" ] []
+        ]
+
+
+refreshCw : Html msg
+refreshCw =
+    svgFeatherIcon "refresh-cw"
+        [ Svg.polyline [ points "23 4 23 10 17 10" ] []
+        , Svg.polyline [ points "1 20 1 14 7 14" ] []
+        , Svg.path [ d "M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" ] []
         ]
 
 

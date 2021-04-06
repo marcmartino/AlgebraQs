@@ -278,8 +278,7 @@ centralForm model =
                 (text "Alg Qs")
 
         buttonStyles =
-            [ width fill
-            , height fill
+            [ height fill
             , borderRadius
             , padding 5
             , Font.size 16
@@ -315,7 +314,8 @@ centralForm model =
                     [ Input.button
                         (List.concat
                             [ buttonStyles
-                            , [ Background.color <| ctaColor model.theme
+                            , [ width <| fillPortion 4
+                              , Background.color <| ctaColor model.theme
                               , Element.focused []
                               , Element.mouseOver [ ctaFocusedColor ]
                               , Element.mouseDown
@@ -339,7 +339,8 @@ centralForm model =
                     , Input.button
                         (List.concat
                             [ buttonStyles
-                            , [ Background.color <| buttonColor model.theme
+                            , [ width <| fillPortion 1
+                              , Background.color <| buttonColor model.theme
                               , Element.focused []
                               , Element.mouseOver [ buttonFocusedColor ]
                               , Element.mouseDown
@@ -354,7 +355,7 @@ centralForm model =
                             ]
                         )
                         { onPress = Just GenerateRandomQuestion
-                        , label = el [ centerX ] <| text "Random"
+                        , label = el [ centerX ] <| Element.html Icons.refreshCw
                         }
                     ]
                 ]

@@ -300,7 +300,7 @@ centralForm model =
             ]
 
         submitEnabled =
-            model.question /= ""
+            String.trim model.question /= ""
 
         inputForm =
             column

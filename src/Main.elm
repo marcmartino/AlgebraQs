@@ -347,7 +347,7 @@ centralForm model =
                                     , blur = 0
                                     , color = rgb255 0 0 0
                                     }
-                                , Font.color <| rgb255 100 100 100
+                                , Font.color <| rgb255 110 110 110
                                 ]
                             ]
                         )

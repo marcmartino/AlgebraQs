@@ -248,13 +248,20 @@ view model =
     }
 
 
-darkToggle : Theme -> Element Msg
-darkToggle theme =
+themeToggleButton : Theme -> Element Msg
+themeToggleButton theme =
     Input.button
         [ alignTop
         , alignRight
-        , Border.rounded 15
+        , Border.roundEach
+            { topRight = 0
+            , bottomRight = 0
+            , bottomLeft = 25
+            , topLeft = 0
+            }
         , paddingXY 10 10
+        , Element.focused []
+        , Element.mouseOver [ Background.color <| rgba255 0 0 0 0.15 ]
         ]
         { onPress = Just ToggleTheme
         , label =
@@ -452,7 +459,7 @@ dashboard model =
         [ height fill
         , width fill
         ]
-        [ darkToggle model.theme
+        [ themeToggleButton model.theme
         , textColumn contentPositioning
             [ centralForm model
             , if isJust model.answer then

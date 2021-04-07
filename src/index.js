@@ -14,13 +14,21 @@ const app = Elm.Main.init({
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-const setFavicon = (val) => document.getElementById("favicon").setAttribute('href', `/favicon-${val}.ico`)
+const setTheme = (val) => {
+  const themeColor = val === "light" ? "#F1FAEE" : "#1D3557"
+  document.getElementById("favicon").setAttribute('href', `/favicon-${val}.ico`)
+  document.body.style.backgroundColor = themeColor;
+  document.querySelector('meta[name=apple-mobile-web-app-status-bar-style]')
+    .setAttribute('content', val == "light" ? "default" : "black-translucent")
+  document.querySelector('meta[name=theme-color]')
+    .setAttribute('content', themeColor)
+}
 
-setFavicon(initTheme)
+setTheme(initTheme)
 
 
 app.ports.toggleTheme.subscribe(newTheme => {
-  setFavicon(newTheme)
+  setTheme(newTheme)
   window.localStorage.setItem("appTheme", newTheme)
 })
 

@@ -1,5 +1,17 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
+    "revision": "bb263d831c4924a5fd738f2881f6e444",
+    "url": "//algebraQs.marmar.io/android-chrome-192x192.png"
+  },
+  {
+    "revision": "950f50437b4801b1868548295f94b4ca",
+    "url": "//algebraQs.marmar.io/android-chrome-512x512.png"
+  },
+  {
+    "revision": "bfd056be2743c47993a0a9bec45aa7e5",
+    "url": "//algebraQs.marmar.io/apple-touch-icon.png"
+  },
+  {
     "revision": "c66c855a47e5a4b69f6a50fa8bfd4e85",
     "url": "//algebraQs.marmar.io/favicon-dark.ico"
   },
@@ -12,20 +24,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "//algebraQs.marmar.io/favicon.ico"
   },
   {
-    "revision": "876dbda796b221416c2ea9381bee264d",
+    "revision": "1b5358421b2e3ea28a6a51a39960d176",
     "url": "//algebraQs.marmar.io/index.html"
   },
   {
-    "revision": "1c82903c2994c2507b385b9042bbfac5",
+    "revision": "e7fe421038fefa45f903d31e501f14e2",
     "url": "//algebraQs.marmar.io/manifest.json"
   },
   {
-    "revision": "c01021173ec243e3d346",
+    "revision": "22b47d85ecb17b2adcde",
     "url": "//algebraQs.marmar.io/static/css/main.9e055e96.chunk.css"
   },
   {
-    "revision": "c01021173ec243e3d346",
-    "url": "//algebraQs.marmar.io/static/js/main.c0102117.chunk.js"
+    "revision": "22b47d85ecb17b2adcde",
+    "url": "//algebraQs.marmar.io/static/js/main.22b47d85.chunk.js"
   },
   {
     "revision": "e3960791863e9f1d954c",

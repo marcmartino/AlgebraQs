@@ -1,16 +1,19 @@
 {
   "main.css": "//algebraQs.marmar.io/static/css/main.9e055e96.chunk.css",
-  "main.js": "//algebraQs.marmar.io/static/js/main.c0102117.chunk.js",
-  "main.js.map": "//algebraQs.marmar.io/static/js/main.c0102117.chunk.js.map",
+  "main.js": "//algebraQs.marmar.io/static/js/main.22b47d85.chunk.js",
+  "main.js.map": "//algebraQs.marmar.io/static/js/main.22b47d85.chunk.js.map",
   "runtime~main.js": "//algebraQs.marmar.io/static/js/runtime~main.e3960791.js",
   "runtime~main.js.map": "//algebraQs.marmar.io/static/js/runtime~main.e3960791.js.map",
   "vendors~main.js": "//algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js",
   "vendors~main.js.map": "//algebraQs.marmar.io/static/js/vendors~main.0b49ec49.chunk.js.map",
   "./service-worker.js": "//algebraQs.marmar.io/./service-worker.js",
+  "android-chrome-192x192.png": "//algebraQs.marmar.io/android-chrome-192x192.png",
+  "android-chrome-512x512.png": "//algebraQs.marmar.io/android-chrome-512x512.png",
+  "apple-touch-icon.png": "//algebraQs.marmar.io/apple-touch-icon.png",
   "favicon-dark.ico": "//algebraQs.marmar.io/favicon-dark.ico",
   "favicon-light.ico": "//algebraQs.marmar.io/favicon-light.ico",
   "favicon.ico": "//algebraQs.marmar.io/favicon.ico",
   "index.html": "//algebraQs.marmar.io/index.html",
   "manifest.json": "//algebraQs.marmar.io/manifest.json",
-  "precache-manifest.e41806951ca2646c95b1b26d14176d8f.js": "//algebraQs.marmar.io/precache-manifest.e41806951ca2646c95b1b26d14176d8f.js"
+  "precache-manifest.d2f8e534582cc58cc09be68ba1a964d0.js": "//algebraQs.marmar.io/precache-manifest.d2f8e534582cc58cc09be68ba1a964d0.js"
 }

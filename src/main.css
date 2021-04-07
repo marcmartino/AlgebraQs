@@ -13,6 +13,7 @@ body {
   font-family: "Source Sans Pro", "Trebuchet MS", "Lucida Grande",
     "Bitstream Vera Sans", "Helvetica Neue", sans-serif;
   margin-top: env(safe-area-inset-top);
+  background-color: #1d3557;
 }
 #animatedPage div {
   transition: all 500ms;

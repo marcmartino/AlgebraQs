@@ -296,7 +296,11 @@ centralForm model =
                 , blur = 1
                 , color = rgba255 0 0 0 0.5
                 }
+            , Element.focused []
             ]
+
+        submitEnabled =
+            model.question /= ""
 
         inputForm =
             column
@@ -321,11 +325,11 @@ centralForm model =
                     [ Input.button
                         (List.concat
                             [ buttonStyles
-                            , [ width <| fillPortion 4
-                              , Background.color <| ctaColor model.theme
-                              , Element.focused []
-                              , Element.mouseOver [ ctaFocusedColor ]
-                              , Element.mouseDown
+                            , [ width <| fillPortion 4 ]
+                            , if submitEnabled then
+                                [ Background.color <| ctaColor model.theme
+                                , Element.mouseOver [ ctaFocusedColor ]
+                                , Element.mouseDown
                                     [ Border.shadow
                                         { offset = ( 0, 0 )
                                         , size = 0
@@ -333,10 +337,26 @@ centralForm model =
                                         , color = rgb255 0 0 0
                                         }
                                     ]
-                              ]
+                                ]
+
+                              else
+                                [ Background.color <| rgb255 150 150 150
+                                , Border.shadow
+                                    { offset = ( 0, 0 )
+                                    , size = 0
+                                    , blur = 0
+                                    , color = rgb255 0 0 0
+                                    }
+                                , Font.color <| rgb255 100 100 100
+                                ]
                             ]
                         )
-                        { onPress = Just SubmitQuestion
+                        { onPress =
+                            if submitEnabled then
+                                Just SubmitQuestion
+
+                            else
+                                Nothing
                         , label =
                             row [ centerX ]
                                 [ el [] (Element.html send)

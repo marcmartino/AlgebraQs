@@ -1,4 +1,4 @@
-port module Main exposing (..)
+port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Navigation
@@ -9,11 +9,10 @@ import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
 import ExampleStatementGenerator exposing (ExampleStatement, generateStatement, prettyExampleStatement)
-import Html exposing (Html)
 import Html.Events
 import Icons exposing (github, moon, send, sun)
 import Json.Decode as Decode
-import Palette exposing (Theme(..), backgroundColor, borderRadius, buttonColor, buttonFocusedColor, ctaColor, ctaFocusedColor, fontColor, moonPurple, secondBackgroundColor, sunOrange)
+import Palette exposing (Theme, ThemeName(..), getTheme)
 import Random
 import StatementParser exposing (answer, toNumeralEquation)
 import Url exposing (Url)
@@ -43,7 +42,7 @@ type alias Model =
     }
 
 
-init : InitFlags -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
+init : InitFlags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
         initialQuestion : String
@@ -60,10 +59,10 @@ init flags url key =
 
         initialTheme =
             if flags.theme == "dark" then
-                Dark
+                getTheme Dark
 
             else
-                Light
+                getTheme Light
     in
     ( { key = key
       , theme = initialTheme
@@ -89,10 +88,10 @@ type Msg
     | SubmitQuestion
     | GenerateRandomQuestion
     | SubmitRandomQuestion ExampleStatement
-    | UpdateQuestionFromPageChange Url.Url
+    | UpdateQuestionFromPageChange Url
 
 
-questionFromQuery : Url.Url -> String
+questionFromQuery : Url -> String
 questionFromQuery url =
     case UrlParser.parse (UrlParser.query (QueryParser.string "q")) url of
         Just (Just question) ->
@@ -140,14 +139,14 @@ update msg model =
         ToggleTheme ->
             ( { model
                 | theme =
-                    if model.theme == Dark then
-                        Light
+                    if model.theme.name == Dark then
+                        getTheme Light
 
                     else
-                        Dark
+                        getTheme Dark
               }
             , toggleTheme
-                (if model.theme == Dark then
+                (if model.theme.name == Dark then
                     "light"
 
                  else
@@ -187,7 +186,12 @@ update msg model =
                 ( model, Cmd.none )
 
             else
-                ( { model | question = newQ, answer = Just <| parseAnswer <| newQ }, Cmd.none )
+                ( { model
+                    | question = newQ
+                    , answer = Just <| parseAnswer <| newQ
+                  }
+                , Cmd.none
+                )
 
 
 
@@ -218,7 +222,7 @@ answerText theme answerObj =
             text "Answer Not Found"
 
         Just (Err err) ->
-            el [ theme |> Palette.buttonColor |> Font.color ] (text err)
+            el [ Font.color theme.fontColor ] (text err)
 
         Just (Ok answer) ->
             answer ++ "." |> capitalize |> text
@@ -239,7 +243,7 @@ view model =
     { title = "Algebra Qs"
     , body =
         [ layout
-            [ Background.color <| backgroundColor model.theme
+            [ Background.color model.theme.backgroundColor
             , Font.family [ Font.typeface "Fira Sans", Font.sansSerif ]
             ]
           <|
@@ -265,11 +269,13 @@ themeToggleButton theme =
         ]
         { onPress = Just ToggleTheme
         , label =
-            if theme == Dark then
-                el [ Font.color sunOrange ] (sun |> Element.html)
+            el [ Font.color theme.themeToggleButtonColor ]
+                (if theme.name == Dark then
+                    Element.html sun
 
-            else
-                el [ Font.color moonPurple ] (moon |> Element.html)
+                 else
+                    Element.html moon
+                )
         }
 
 
@@ -280,16 +286,16 @@ centralForm model =
             el
                 [ Region.heading 1
                 , Font.size 24
-                , Font.color <| fontColor model.theme
+                , Font.color model.theme.fontColor
                 ]
                 (text "Alg Qs")
 
         buttonStyles =
             [ height fill
-            , borderRadius
+            , Border.rounded model.theme.borderRadius
             , padding 5
             , Font.size 16
-            , Font.color Palette.prussianBlue
+            , Font.color model.theme.buttonTextColor
             , Border.shadow
                 { offset = ( 0, 2 )
                 , size = 0
@@ -304,16 +310,16 @@ centralForm model =
 
         inputForm =
             column
-                [ Background.color <| secondBackgroundColor model.theme
-                , borderRadius
+                [ Background.color model.theme.sectionBackgroundColor
+                , Border.rounded model.theme.borderRadius
                 , spacingXY 0 10
                 , padding 10
                 ]
                 [ Input.multiline
-                    [ borderRadius
+                    [ Border.rounded model.theme.borderRadius
                     , onEnter SubmitQuestion
-                    , Font.color <| fontColor model.theme
-                    , Background.color <| backgroundColor model.theme
+                    , Font.color model.theme.fontColor
+                    , Background.color model.theme.backgroundColor
                     ]
                     { text = model.question
                     , placeholder = Just (Input.placeholder [] <| text "Ask me a question")
@@ -327,8 +333,8 @@ centralForm model =
                             [ buttonStyles
                             , [ width <| fillPortion 4 ]
                             , if submitEnabled then
-                                [ Background.color <| ctaColor model.theme
-                                , Element.mouseOver [ ctaFocusedColor ]
+                                [ Background.color model.theme.ctaColor
+                                , Element.mouseOver [ Background.color model.theme.ctaFocusedColor ]
                                 , Element.mouseDown
                                     [ Border.shadow
                                         { offset = ( 0, 0 )
@@ -340,14 +346,14 @@ centralForm model =
                                 ]
 
                               else
-                                [ Background.color <| rgb255 150 150 150
+                                [ Background.color model.theme.disabledBackgroundColor
                                 , Border.shadow
                                     { offset = ( 0, 0 )
                                     , size = 0
                                     , blur = 0
                                     , color = rgb255 0 0 0
                                     }
-                                , Font.color <| rgb255 110 110 110
+                                , Font.color model.theme.disabledFontColor
                                 ]
                             ]
                         )
@@ -367,9 +373,9 @@ centralForm model =
                         (List.concat
                             [ buttonStyles
                             , [ width <| fillPortion 1
-                              , Background.color <| buttonColor model.theme
+                              , Background.color model.theme.buttonColor
                               , Element.focused []
-                              , Element.mouseOver [ buttonFocusedColor ]
+                              , Element.mouseOver [ Background.color model.theme.buttonFocusedColor ]
                               , Element.mouseDown
                                     [ Border.shadow
                                         { offset = ( 0, 0 )
@@ -413,10 +419,10 @@ answers model =
         [ centerX
         , padding 10
         , width fill
-        , Background.color <| secondBackgroundColor model.theme
-        , borderRadius
+        , Background.color model.theme.sectionBackgroundColor
+        , Border.rounded model.theme.borderRadius
         , spacingXY 0 10
-        , Font.color <| fontColor model.theme
+        , Font.color model.theme.fontColor
         ]
         [ paragraph [ Font.underline ]
             [ model.question
@@ -444,7 +450,7 @@ footer model =
         [ alignBottom
         , width fill
         , padding 20
-        , Font.color <| fontColor model.theme
+        , Font.color model.theme.fontColor
         ]
         [ newTabLink [ alignLeft ]
             { url = "//github.com/marcmartino"

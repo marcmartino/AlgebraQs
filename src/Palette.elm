@@ -22,6 +22,7 @@ type alias Theme =
     , ctaFocusedColor : Color
     , buttonColor : Color
     , buttonFocusedColor : Color
+    , buttonTextColor : Color
     , themeToggleButtonColor : Color
     }
 
@@ -49,6 +50,7 @@ lightTheme =
     , ctaFocusedColor = purpleMountain70
     , buttonColor = mauvelous
     , buttonFocusedColor = mauvelous70
+    , buttonTextColor = prussianBlue
     , themeToggleButtonColor = moonPurple
     }
 
@@ -67,6 +69,7 @@ darkTheme =
     , ctaFocusedColor = purpleMountain70
     , buttonColor = mauvelous
     , buttonFocusedColor = mauvelous70
+    , buttonTextColor = prussianBlue
     , themeToggleButtonColor = sunOrange
     }
 

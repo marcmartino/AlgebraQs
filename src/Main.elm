@@ -1,4 +1,4 @@
-port module Main exposing (..)
+port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Navigation
@@ -74,7 +74,7 @@ init flags url key =
     )
 
 
-port toggleThemeName : String -> Cmd msg
+port toggleTheme : String -> Cmd msg
 
 
 
@@ -83,7 +83,7 @@ port toggleThemeName : String -> Cmd msg
 
 type Msg
     = NoOp
-    | ToggleThemeName
+    | ToggleTheme
     | UpdateQuestion String
     | SubmitQuestion
     | GenerateRandomQuestion
@@ -136,7 +136,7 @@ update msg model =
             , Cmd.none
             )
 
-        ToggleThemeName ->
+        ToggleTheme ->
             ( { model
                 | theme =
                     if model.theme.name == Dark then
@@ -145,7 +145,7 @@ update msg model =
                     else
                         getTheme Dark
               }
-            , toggleThemeName
+            , toggleTheme
                 (if model.theme.name == Dark then
                     "light"
 
@@ -267,7 +267,7 @@ themeToggleButton theme =
         , Element.focused []
         , Element.mouseOver [ Background.color <| rgba255 0 0 0 0.15 ]
         ]
-        { onPress = Just ToggleThemeName
+        { onPress = Just ToggleTheme
         , label =
             el [ Font.color theme.themeToggleButtonColor ]
                 (if theme.name == Dark then
@@ -295,7 +295,7 @@ centralForm model =
             , Border.rounded model.theme.borderRadius
             , padding 5
             , Font.size 16
-            , Font.color model.theme.fontColor
+            , Font.color model.theme.buttonTextColor
             , Border.shadow
                 { offset = ( 0, 2 )
                 , size = 0

@@ -1,21 +1,77 @@
-module Palette exposing (..)
+module Palette exposing (Theme, ThemeName(..), boxShadow, getTheme)
 
-import Element exposing (Color, rgb255, rgba255, toRgb)
-import Element.Background as Background
+import Element exposing (Color, rgb255, rgba255)
 import Element.Border as Border
 
 
-type Theme
+type ThemeName
     = Dark
     | Light
 
 
-borderRadius : Element.Attribute msg
-borderRadius =
-    Border.rounded 5
+type alias Theme =
+    { name : ThemeName
+    , borderRadius : Int
+    , fontColor : Color
+    , secondaryFontColor : Color
+    , disabledFontColor : Color
+    , backgroundColor : Color
+    , disabledBackgroundColor : Color
+    , sectionBackgroundColor : Color
+    , ctaColor : Color
+    , ctaFocusedColor : Color
+    , buttonColor : Color
+    , buttonFocusedColor : Color
+    , themeToggleButtonColor : Color
+    }
 
 
-boxShadow : Theme -> Element.Attr decorative msg
+getTheme : ThemeName -> Theme
+getTheme name =
+    if name == Light then
+        lightTheme
+
+    else
+        darkTheme
+
+
+lightTheme : Theme
+lightTheme =
+    { name = Light
+    , borderRadius = 5
+    , fontColor = prussianBlue
+    , secondaryFontColor = mauvelous
+    , disabledFontColor = disabledGray
+    , backgroundColor = honeydew
+    , disabledBackgroundColor = disabledBackgroundGray
+    , sectionBackgroundColor = powderBlue
+    , ctaColor = purpleMountain
+    , ctaFocusedColor = purpleMountain70
+    , buttonColor = mauvelous
+    , buttonFocusedColor = mauvelous70
+    , themeToggleButtonColor = moonPurple
+    }
+
+
+darkTheme : Theme
+darkTheme =
+    { name = Dark
+    , borderRadius = 5
+    , fontColor = honeydew
+    , secondaryFontColor = mauvelous
+    , disabledFontColor = disabledGray
+    , backgroundColor = prussianBlue
+    , disabledBackgroundColor = disabledBackgroundGray
+    , sectionBackgroundColor = indigoDye
+    , ctaColor = purpleMountain
+    , ctaFocusedColor = purpleMountain70
+    , buttonColor = mauvelous
+    , buttonFocusedColor = mauvelous70
+    , themeToggleButtonColor = sunOrange
+    }
+
+
+boxShadow : ThemeName -> Element.Attr decorative msg
 boxShadow theme =
     Border.shadow
         { color =
@@ -28,76 +84,6 @@ boxShadow theme =
         , blur = 3
         , size = 4
         }
-
-
-
--- contrast : Color -> Color -> Float
--- contrast x y =
---     let
---         xRgb = toRgb x
---         yRgb = toRgb y
---     in
---     xRgb.red - yRgb.red
-
-
-fontColor : Theme -> Color
-fontColor theme =
-    if theme == Dark then
-        honeydew
-
-    else
-        prussianBlue
-
-
-
--- maximumContrast bgColor
--- [ honeydew
--- , celadonBlue
--- ]
-
-
-backgroundColor : Theme -> Color
-backgroundColor theme =
-    if theme == Dark then
-        prussianBlue
-
-    else
-        honeydew
-
-
-secondBackgroundColor : Theme -> Color
-secondBackgroundColor theme =
-    if theme == Dark then
-        indigoDye
-
-    else
-        powderBlue
-
-
-ctaFocusedColor =
-    Background.gradient
-        { angle = 125
-        , steps =
-            [ rgba255 153 124 202 0.7 ]
-        }
-
-
-buttonFocusedColor =
-    Background.gradient
-        { angle = 125
-        , steps =
-            [ rgba255 244 164 171 0.7 ]
-        }
-
-
-ctaColor : Theme -> Color
-ctaColor theme =
-    purpleMountain
-
-
-buttonColor : Theme -> Color
-buttonColor theme =
-    mauvelous
 
 
 opal : Color
@@ -145,6 +131,26 @@ mauvelous =
     rgb255 244 164 171
 
 
+mauvelous70 : Color
+mauvelous70 =
+    rgba255 244 164 171 0.7
+
+
 purpleMountain : Color
 purpleMountain =
     rgb255 153 124 202
+
+
+purpleMountain70 : Color
+purpleMountain70 =
+    rgba255 153 124 202 0.7
+
+
+disabledBackgroundGray : Color
+disabledBackgroundGray =
+    rgb255 150 150 150
+
+
+disabledGray : Color
+disabledGray =
+    rgb255 110 110 110

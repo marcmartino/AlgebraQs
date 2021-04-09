@@ -2,7 +2,9 @@ import './main.css';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 
-const initTheme = window.localStorage.getItem('appTheme') || 'light'
+const initTheme = window.localStorage.getItem('appTheme') ||
+  (window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
 
 const app = Elm.Main.init({
   node: document.getElementById('root'),

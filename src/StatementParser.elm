@@ -27,7 +27,17 @@ type StatementValue
 
 numthParser : Parser Int
 numthParser =
-    Parser.andThen thParser numParser
+    numParser
+        |> Parser.andThen thParser
+        |> Parser.andThen
+            (\n ->
+                Parser.map (always n)
+                    (oneOf
+                        [ keyword " power"
+                        , symbol ""
+                        ]
+                    )
+            )
 
 
 thParser : Int -> Parser Int
@@ -81,9 +91,7 @@ statementParser : Parser StatementValue
 statementParser =
     succeed identity
         |. oneOf
-            [ keyword "What is"
-            , keyword "What's"
-            , keyword "what is"
+            [ keyword "what is"
             , keyword "what's"
             , symbol ""
             ]
@@ -142,6 +150,7 @@ simplify simps alg =
 prepQuestion : String -> String
 prepQuestion =
     String.trim
+        >> String.toLower
         >> (\str ->
                 if String.endsWith "?" str then
                     str

@@ -1,6 +1,7 @@
-module WrittenNumbers exposing (digitGroupName, mapGroupNames, mapSingleDigitNames, mapTeensDigitNames, mapTensDigitNames, singleDigitName, teensDigitName, tensDigitName)
+module WrittenNumbers exposing (digitGroupName, mapGroupNames, mapSingleDigitNames, mapTeensDigitNames, mapTensDigitNames, singleDigitName, teensDigitName, tensDigitName, thNumberNames)
 
 import Array exposing (Array, fromList)
+import Html exposing (a)
 import List
 
 
@@ -26,6 +27,11 @@ tensDigitList =
 groupingNamesList : List String
 groupingNamesList =
     [ "thousand", "million", "billion", "trillion", "quadrillion", "quintrillion", "sentillion", "septillion" ]
+
+
+thNumbersList : List String
+thNumbersList =
+    [ "zeroth", "first", "second", "third", "fourth", "fifth" ]
 
 
 singleDigits : Array String
@@ -96,3 +102,8 @@ mapTensDigitNames =
 mapGroupNames : DigitMap a
 mapGroupNames =
     listMap <| transformListIndex ((+) 1 >> (*) 3 >> (\x -> 10 ^ x)) groupingNamesList
+
+
+thNumberNames : DigitMap a
+thNumberNames =
+    listMap <| transformListIndex identity thNumbersList

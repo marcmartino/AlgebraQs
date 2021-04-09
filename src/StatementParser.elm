@@ -81,9 +81,7 @@ statementParser : Parser StatementValue
 statementParser =
     succeed identity
         |. oneOf
-            [ keyword "What is"
-            , keyword "What's"
-            , keyword "what is"
+            [ keyword "what is"
             , keyword "what's"
             , symbol ""
             ]
@@ -142,6 +140,7 @@ simplify simps alg =
 prepQuestion : String -> String
 prepQuestion =
     String.trim
+        >> String.toLower
         >> (\str ->
                 if String.endsWith "?" str then
                     str

@@ -1,7 +1,7 @@
 module NumberParser exposing (numParser)
 
 import Parser exposing ((|.), (|=), Parser, int, keyword, oneOf, spaces, succeed, symbol)
-import WrittenNumbers exposing (mapGroupNames, mapSingleDigitNames, mapTeensDigitNames, mapTensDigitNames)
+import WrittenNumbers exposing (mapGroupNames, mapSingleDigitNames, mapTeensDigitNames, mapTensDigitNames, thNumberNames)
 
 
 singleDigitParsers : List (Parser Int)
@@ -91,12 +91,15 @@ singleDigitHundreds =
 writtenOutNumParser : Parser Int
 writtenOutNumParser =
     oneOf
-        [ twoDigitNumParser
-        , singleDigitHundreds
-        , oneOf singleDigitParsers
+        [ oneOf <| thNumberNames (\( val, numName ) -> Parser.map (always val) (keyword numName))
+        , oneOf
+            [ twoDigitNumParser
+            , singleDigitHundreds
+            , oneOf singleDigitParsers
+            ]
+            |> Parser.andThen orderOfMagnitudeParser
+            |> Parser.andThen writtenOutNumRecurseParser
         ]
-        |> Parser.andThen orderOfMagnitudeParser
-        |> Parser.andThen writtenOutNumRecurseParser
 
 
 orderOfMagnitudeParser : Int -> Parser Int

@@ -27,7 +27,17 @@ type StatementValue
 
 numthParser : Parser Int
 numthParser =
-    Parser.andThen thParser numParser
+    numParser
+        |> Parser.andThen thParser
+        |> Parser.andThen
+            (\n ->
+                Parser.map (always n)
+                    (oneOf
+                        [ keyword " power"
+                        , symbol ""
+                        ]
+                    )
+            )
 
 
 thParser : Int -> Parser Int

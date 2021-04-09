@@ -99,6 +99,33 @@ tests =
             , test "large written out single number" <|
                 \() ->
                     Expect.equal (Just -899933) <| answer "What is negative eight hundred and ninety-nine thousand nine hundred and thirty-three?"
+            , test "numeric exponent" <|
+                \() ->
+                    Expect.equal (Just 8) <| answer "What is 2 ^ 3?"
+            , test "written exponent" <|
+                \() ->
+                    Expect.equal (Just 8) <| answer "What is two ^ three?"
+            , test "written exponent w/ 'to the' operator" <|
+                \() ->
+                    Expect.equal (Just 8) <| answer "What is two to the third?"
+            , test "written out exponent w/ 'to the x power' operator" <|
+                \() ->
+                    Expect.equal (Just 8) <| answer "What is two to the third power?"
+            , test "numeric exponent w/ rd suffx" <|
+                \() ->
+                    Expect.equal (Just 8) <| answer "What is 2 to the 3rd?"
+            , test "numeric exponent w/ rd suffx with subsequent 'power' " <|
+                \() ->
+                    Expect.equal (Just 8) <| answer "What is 2 to the 3rd?"
+            , test "numeric exponent w/ nd suffix" <|
+                \() ->
+                    Expect.equal (Just 4) <| answer "What is 2 to the 2nd?"
+            , test "numeric exponent w/ st suffix" <|
+                \() ->
+                    Expect.equal (Just 2097152) <| answer "What is 2 to the 21st?"
+            , test "numeric exponent w/ th suffix" <|
+                \() ->
+                    Expect.equal (Just 32) <| answer "What is 2 to the 5th?"
             , test "unknown operation" <|
                 \() ->
                     Expect.equal Nothing <| answer "What is 52 cubed?"

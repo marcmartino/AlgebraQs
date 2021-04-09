@@ -135,6 +135,28 @@ tests =
             , test "negative five" <|
                 \() -> Expect.equal (Ok -5) (run numParser "negative five")
             ]
+        , describe "suffixed numbers"
+            [ test "zeroth" <|
+                \() ->
+                    Expect.equal (Ok 0)
+                        (run numParser "zeroth")
+            , test "first" <|
+                \() ->
+                    Expect.equal (Ok 1)
+                        (run numParser "first")
+            , test "second" <|
+                \() ->
+                    Expect.equal (Ok 2)
+                        (run numParser "second")
+            , test "third" <|
+                \() ->
+                    Expect.equal (Ok 3)
+                        (run numParser "third")
+            , test "fifth" <|
+                \() ->
+                    Expect.equal (Ok 5)
+                        (run numParser "fifth")
+            ]
         , describe "multiple word numbers"
             [ test "twenty-seven" <|
                 \() ->

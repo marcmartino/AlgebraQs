@@ -24,7 +24,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "//algebraQs.marmar.io/favicon.ico"
   },
   {
-    "revision": "48e15d7e77e39ce3f5db472805e8102b",
+    "revision": "dd00f6a6e3500044ed13e0f694cf088a",
     "url": "//algebraQs.marmar.io/index.html"
   },
   {
@@ -32,12 +32,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "//algebraQs.marmar.io/manifest.json"
   },
   {
-    "revision": "8768683314987859777d",
+    "revision": "e19713b51b79e1459a56",
     "url": "//algebraQs.marmar.io/static/css/main.c41eae35.chunk.css"
   },
   {
-    "revision": "8768683314987859777d",
-    "url": "//algebraQs.marmar.io/static/js/main.87686833.chunk.js"
+    "revision": "e19713b51b79e1459a56",
+    "url": "//algebraQs.marmar.io/static/js/main.e19713b5.chunk.js"
   },
   {
     "revision": "e3960791863e9f1d954c",

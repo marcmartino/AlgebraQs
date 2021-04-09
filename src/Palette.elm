@@ -12,7 +12,8 @@ type ThemeName
 type alias Theme =
     { name : ThemeName
     , borderRadius : Int
-    , fontColor : Color
+    , textColor : Color
+    , errorTextColor : Color
     , secondaryFontColor : Color
     , disabledFontColor : Color
     , backgroundColor : Color
@@ -40,7 +41,8 @@ lightTheme : Theme
 lightTheme =
     { name = Light
     , borderRadius = 5
-    , fontColor = prussianBlue
+    , textColor = prussianBlue
+    , errorTextColor = mauvelous
     , secondaryFontColor = mauvelous
     , disabledFontColor = disabledGray
     , backgroundColor = honeydew
@@ -59,7 +61,8 @@ darkTheme : Theme
 darkTheme =
     { name = Dark
     , borderRadius = 5
-    , fontColor = honeydew
+    , textColor = honeydew
+    , errorTextColor = mauvelous
     , secondaryFontColor = mauvelous
     , disabledFontColor = disabledGray
     , backgroundColor = prussianBlue

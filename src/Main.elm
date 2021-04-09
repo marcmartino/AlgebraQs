@@ -222,7 +222,7 @@ answerText theme answerObj =
             text "Answer Not Found"
 
         Just (Err err) ->
-            el [ Font.color theme.fontColor ] (text err)
+            el [ Font.color theme.errorTextColor ] (text err)
 
         Just (Ok answer) ->
             answer ++ "." |> capitalize |> text
@@ -286,7 +286,7 @@ centralForm model =
             el
                 [ Region.heading 1
                 , Font.size 24
-                , Font.color model.theme.fontColor
+                , Font.color model.theme.textColor
                 ]
                 (text "Alg Qs")
 
@@ -318,7 +318,7 @@ centralForm model =
                 [ Input.multiline
                     [ Border.rounded model.theme.borderRadius
                     , onEnter SubmitQuestion
-                    , Font.color model.theme.fontColor
+                    , Font.color model.theme.textColor
                     , Background.color model.theme.backgroundColor
                     ]
                     { text = model.question
@@ -422,7 +422,7 @@ answers model =
         , Background.color model.theme.sectionBackgroundColor
         , Border.rounded model.theme.borderRadius
         , spacingXY 0 10
-        , Font.color model.theme.fontColor
+        , Font.color model.theme.textColor
         ]
         [ paragraph [ Font.underline ]
             [ model.question
@@ -450,7 +450,7 @@ footer model =
         [ alignBottom
         , width fill
         , padding 20
-        , Font.color model.theme.fontColor
+        , Font.color model.theme.textColor
         ]
         [ newTabLink [ alignLeft ]
             { url = "//github.com/marcmartino"

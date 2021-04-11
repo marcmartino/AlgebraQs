@@ -1,4 +1,4 @@
-module StatementParser exposing (answer, toNumeralEquation)
+module StatementParser exposing (answer, parseStatement, toNumeralEquation)
 
 import Html.Attributes exposing (list)
 import NumberParser exposing (numParser)
@@ -174,6 +174,27 @@ answer problem =
             Nothing
 
 
+parseStatement : String -> Result (List Parser.DeadEnd) StatementValue
+parseStatement =
+    prepQuestion >> run statementParser
+
+
+getStatementErrorMessage : List Parser.DeadEnd -> String
+getStatementErrorMessage errors =
+    case errors of
+        { problem } :: _ ->
+            case problem of
+                Parser.Problem problemMessage ->
+                    problemMessage
+
+                -- it's possible to parse out other issues here and give better errors
+                _ ->
+                    "Parse error"
+
+        _ ->
+            "Parse error"
+
+
 prettyOperator : Operator -> String
 prettyOperator op =
     case op of
@@ -245,19 +266,14 @@ toEquation { x, operation, y } =
             String.join " " [ prettyNum x, prettyOperator operation, toEquation yStatement ]
 
 
-toNumeralEquation : String -> Maybe String
-toNumeralEquation problem =
-    case run statementParser <| prepQuestion problem of
-        Ok (Statement stmt) ->
+toNumeralEquation : StatementValue -> String
+toNumeralEquation statement =
+    case statement of
+        Statement stmt ->
             toEquation stmt
-                |> Just
 
-        Ok (Num num) ->
+        Num num ->
             prettyNum num
-                |> Just
-
-        _ ->
-            Nothing
 
 
 simplifyStatement : (Operator -> Bool) -> (Int -> Operator -> Int -> Int) -> AlgebraicStatement -> StatementValue

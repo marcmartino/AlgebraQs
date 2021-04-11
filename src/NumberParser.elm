@@ -108,16 +108,25 @@ orderOfMagnitudeParser prevVal =
         |. spaces
         |= oneOf
             [ oneOf
-                (mapGroupNames <| \( num, token ) -> Parser.map (always (num * prevVal)) (keyword token))
+                (mapGroupNames <| \( num, token ) -> Parser.map (always <| prevVal * num) (keyword token))
             , Parser.map (always prevVal) (symbol "")
             ]
 
 
 writtenOutNumRecurseParser : Int -> Parser Int
-writtenOutNumRecurseParser x =
+writtenOutNumRecurseParser prevNum =
     succeed identity
         |. spaces
         |= oneOf
-            [ Parser.map ((+) x) writtenOutNumParser
-            , Parser.map (always x) (symbol "")
+            -- [ Parser.map ((+) x) writtenOutNumParser
+            [ writtenOutNumParser
+                |> Parser.andThen
+                    (\nextNum ->
+                        if prevNum > nextNum then
+                            succeed (prevNum + nextNum)
+
+                        else
+                            Parser.problem "Orders must descend to be a valid number"
+                    )
+            , Parser.map (always prevNum) (symbol "")
             ]

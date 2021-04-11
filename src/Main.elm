@@ -297,10 +297,10 @@ centralForm model =
             , Font.size 16
             , Font.color model.theme.buttonTextColor
             , Border.shadow
-                { offset = ( 0, 2 )
-                , size = 0
+                { offset = ( 0, 3 )
+                , size = 1
                 , blur = 1
-                , color = rgba255 0 0 0 0.5
+                , color = rgba255 0 0 0 0.7
                 }
             , Element.focused []
             ]
@@ -340,7 +340,7 @@ centralForm model =
                                         { offset = ( 0, 0 )
                                         , size = 0
                                         , blur = 0
-                                        , color = rgb255 0 0 0
+                                        , color = rgba255 0 0 0 0
                                         }
                                     ]
                                 ]
@@ -351,7 +351,7 @@ centralForm model =
                                     { offset = ( 0, 0 )
                                     , size = 0
                                     , blur = 0
-                                    , color = rgb255 0 0 0
+                                    , color = rgba255 0 0 0 0
                                     }
                                 , Font.color model.theme.disabledFontColor
                                 ]

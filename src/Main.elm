@@ -18,7 +18,6 @@ import Html.Events
 import Icons exposing (github, moon, send, sun)
 import Json.Decode as Decode
 import Palette exposing (Theme, ThemeName(..), getTheme)
-import Parser
 import Random
 import StatementParser
     exposing
@@ -340,7 +339,7 @@ centralForm model =
                     , Background.color model.theme.backgroundColor
                     ]
                     { text = model.question
-                    , placeholder = Just (Input.placeholder [] <| text "Ask me a question")
+                    , placeholder = Just (Input.placeholder [] <| text "Ask me an algebraic question.")
                     , label = Input.labelHidden "What is your algebraic question?"
                     , onChange = UpdateQuestion
                     , spellcheck = True

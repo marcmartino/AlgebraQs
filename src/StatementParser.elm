@@ -1,4 +1,4 @@
-module StatementParser exposing (answer, parseStatement, toNumeralEquation)
+module StatementParser exposing (StatementParserResult, StatementValue(..), answer, getStatementErrorMessage, parseStatement, prettyNum, toNumeralEquation, toNumericAnswer)
 
 import Html.Attributes exposing (list)
 import NumberParser exposing (numParser)
@@ -23,6 +23,10 @@ type alias AlgebraicStatement =
 type StatementValue
     = Statement AlgebraicStatement
     | Num Int
+
+
+type alias StatementParserResult =
+    Result (List Parser.DeadEnd) StatementValue
 
 
 numthParser : Parser Int
@@ -174,7 +178,22 @@ answer problem =
             Nothing
 
 
-parseStatement : String -> Result (List Parser.DeadEnd) StatementValue
+toNumericAnswer : StatementValue -> Result String Int
+toNumericAnswer statement =
+    case statement of
+        Statement stmt ->
+            case stmt |> simplify operatorSimplifiers of
+                Just num ->
+                    Ok num
+
+                Nothing ->
+                    Err "Number too large to display"
+
+        Num num ->
+            Ok num
+
+
+parseStatement : String -> StatementParserResult
 parseStatement =
     prepQuestion >> run statementParser
 

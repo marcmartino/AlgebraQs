@@ -13,8 +13,9 @@ import Html.Events
 import Icons exposing (github, moon, send, sun)
 import Json.Decode as Decode
 import Palette exposing (Theme, ThemeName(..), getTheme)
+import Parser
 import Random
-import StatementParser exposing (answer, toNumeralEquation)
+import StatementParser exposing (StatementParserResult, StatementValue(..), getStatementErrorMessage, parseStatement, prettyNum, toNumeralEquation, toNumericAnswer)
 import Url exposing (Url)
 import Url.Builder as UrlBuilder
 import Url.Parser as UrlParser
@@ -38,7 +39,7 @@ type alias Model =
     , theme : Theme
     , key : Navigation.Key
     , question : String
-    , answer : Maybe (Result String String)
+    , answer : Maybe StatementParserResult
     }
 
 
@@ -54,7 +55,7 @@ init flags url key =
                 Nothing
 
             else
-                parseAnswer initialQuestion
+                parseStatement initialQuestion
                     |> Just
 
         initialTheme =
@@ -101,21 +102,6 @@ questionFromQuery url =
             ""
 
 
-parseAnswer : String -> Result String String
-parseAnswer q =
-    case answer q of
-        Just num ->
-            case writeOut num of
-                Ok ans ->
-                    Ok ans
-
-                _ ->
-                    Err "Answer too large to display"
-
-        _ ->
-            Err "Parse error"
-
-
 pushNewQuestionUrl : Navigation.Key -> String -> Cmd msg
 pushNewQuestionUrl key question =
     UrlBuilder.relative [] [ UrlBuilder.string "q" question ]
@@ -157,7 +143,7 @@ update msg model =
         SubmitQuestion ->
             ( { model
                 | question = String.trim model.question
-                , answer = Just <| parseAnswer <| model.question
+                , answer = parseStatement model.question |> Just
               }
             , pushNewQuestionUrl model.key <| String.trim model.question
             )
@@ -172,7 +158,7 @@ update msg model =
             in
             ( { model
                 | question = newQ
-                , answer = Just <| parseAnswer <| newQ
+                , answer = parseStatement newQ |> Just
               }
             , pushNewQuestionUrl model.key newQ
             )
@@ -188,7 +174,7 @@ update msg model =
             else
                 ( { model
                     | question = newQ
-                    , answer = Just <| parseAnswer <| newQ
+                    , answer = parseStatement newQ |> Just
                   }
                 , Cmd.none
                 )
@@ -215,27 +201,42 @@ onEnter msg =
         )
 
 
-answerText : Theme -> Maybe (Result String String) -> Element msg
+answerText : Theme -> StatementParserResult -> Element msg
 answerText theme answerObj =
+    let
+        errorMessage =
+            el [ Font.color theme.errorTextColor ]
+    in
     case answerObj of
-        Nothing ->
-            text "Answer Not Found"
+        Err err ->
+            errorMessage
+                (err
+                    |> getStatementErrorMessage
+                    |> text
+                )
 
-        Just (Err err) ->
-            el [ Font.color theme.errorTextColor ] (text err)
+        Ok answer ->
+            let
+                answerResult =
+                    toNumericAnswer answer
+            in
+            case answerResult of
+                Ok answerNum ->
+                    case writeOut answerNum of
+                        Ok writtenOutAnswer ->
+                            writtenOutAnswer
+                                ++ ". "
+                                ++ "("
+                                ++ prettyNum answerNum
+                                ++ ")"
+                                |> capitalize
+                                |> text
 
-        Just (Ok answer) ->
-            answer ++ "." |> capitalize |> text
+                        _ ->
+                            answerNum |> prettyNum |> capitalize |> text
 
-
-isJust : Maybe a -> Bool
-isJust maybe =
-    case maybe of
-        Just _ ->
-            True
-
-        _ ->
-            False
+                _ ->
+                    text "Parse Error" |> errorMessage
 
 
 view : Model -> Browser.Document Msg
@@ -413,26 +414,41 @@ centralForm model =
         ]
 
 
-answers : Model -> Element msg
-answers model =
+numeralEquationText : StatementParserResult -> Maybe (Element msg)
+numeralEquationText val =
+    case val of
+        Ok stmt ->
+            stmt
+                |> toNumeralEquation
+                |> text
+                |> List.singleton
+                |> paragraph [ Font.underline ]
+                |> Just
+
+        _ ->
+            Nothing
+
+
+answers : Theme -> StatementParserResult -> Element msg
+answers theme answer =
+    let
+        equationText =
+            numeralEquationText answer
+    in
     column
         [ centerX
         , padding 10
         , width fill
-        , Background.color model.theme.sectionBackgroundColor
-        , Border.rounded model.theme.borderRadius
+        , Background.color theme.sectionBackgroundColor
+        , Border.rounded theme.borderRadius
         , spacingXY 0 10
-        , Font.color model.theme.textColor
+        , Font.color theme.textColor
         ]
-        [ paragraph [ Font.underline ]
-            [ model.question
-                |> toNumeralEquation
-                |> Maybe.withDefault model.question
-                |> text
+        (List.append (equationText |> Maybe.map List.singleton |> Maybe.withDefault [])
+            [ paragraph []
+                [ answerText theme answer ]
             ]
-        , paragraph []
-            [ answerText model.theme model.answer ]
-        ]
+        )
 
 
 capitalize : String -> String
@@ -480,6 +496,14 @@ dashboard model =
                     , paddingXY 0 60
                     , spacing 10
                     ]
+
+        answerPanel =
+            case model.answer of
+                Nothing ->
+                    text ""
+
+                Just answer ->
+                    answers model.theme answer
     in
     column
         [ height fill
@@ -488,11 +512,7 @@ dashboard model =
         [ themeToggleButton model.theme
         , textColumn contentPositioning
             [ centralForm model
-            , if isJust model.answer then
-                answers model
-
-              else
-                text ""
+            , answerPanel
             ]
         , footer model
         ]

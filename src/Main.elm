@@ -8,14 +8,31 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
-import ExampleStatementGenerator exposing (ExampleStatement, generateStatement, prettyExampleStatement)
+import ExampleStatementGenerator
+    exposing
+        ( ExampleStatement
+        , generateStatement
+        , prettyExampleStatement
+        )
 import Html.Events
 import Icons exposing (github, moon, send, sun)
 import Json.Decode as Decode
 import Palette exposing (Theme, ThemeName(..), getTheme)
 import Parser
 import Random
-import StatementParser exposing (StatementParserResult, StatementValue(..), getStatementErrorMessage, parseStatement, prettyNum, toNumeralEquation, toNumericAnswer)
+import StatementParser
+    exposing
+        ( StatementParserResult
+        , StatementValue(..)
+        , parseStatement
+        )
+import StatementVizualizers
+    exposing
+        ( getStatementErrorMessage
+        , prettyNum
+        , toNumeralEquation
+        , toNumericAnswer
+        )
 import Url exposing (Url)
 import Url.Builder as UrlBuilder
 import Url.Parser as UrlParser
@@ -185,14 +202,14 @@ update msg model =
 
 
 onEnter : msg -> Element.Attribute msg
-onEnter msg =
+onEnter enterMsg =
     Element.htmlAttribute
         (Html.Events.on "keyup"
             (Decode.field "key" Decode.string
                 |> Decode.andThen
                     (\key ->
                         if key == "Enter" then
-                            Decode.succeed msg
+                            Decode.succeed enterMsg
 
                         else
                             Decode.fail "Not the enter key"

@@ -65,14 +65,14 @@ darkTheme =
     , errorTextColor = mauvelous
     , secondaryFontColor = mauvelous
     , disabledFontColor = disabledGray
-    , backgroundColor = prussianBlue
+    , backgroundColor = oxfordBlue
     , disabledBackgroundColor = disabledBackgroundGray
-    , sectionBackgroundColor = indigoDye
-    , ctaColor = purpleMountain
-    , ctaFocusedColor = purpleMountain70
-    , buttonColor = mauvelous
-    , buttonFocusedColor = mauvelous70
-    , buttonTextColor = prussianBlue
+    , sectionBackgroundColor = prussianBlue
+    , ctaColor = sizzlingRed
+    , ctaFocusedColor = rubyRed
+    , buttonColor = purpleMountain
+    , buttonFocusedColor = darkSlateBlue
+    , buttonTextColor = rgb255 220 220 220
     , themeToggleButtonColor = sunOrange
     }
 
@@ -102,11 +102,6 @@ sunOrange =
     rgb255 201 157 24
 
 
-indigoDye : Color
-indigoDye =
-    rgb255 50 71 102
-
-
 moonPurple : Color
 moonPurple =
     rgb255 74 24 201
@@ -130,6 +125,11 @@ celadonBlue =
 prussianBlue : Color
 prussianBlue =
     rgb255 29 53 87
+
+
+oxfordBlue : Color
+oxfordBlue =
+    rgb255 15 28 46
 
 
 mauvelous : Color
@@ -160,3 +160,18 @@ disabledBackgroundGray =
 disabledGray : Color
 disabledGray =
     rgb255 110 110 110
+
+
+sizzlingRed : Color
+sizzlingRed =
+    rgb255 233 73 87
+
+
+rubyRed : Color
+rubyRed =
+    rgb255 163 20 32
+
+
+darkSlateBlue : Color
+darkSlateBlue =
+    rgb255 74 57 147

@@ -218,5 +218,9 @@ tests =
                 \() ->
                     Expect.equal (Ok -637007059)
                         (run numParser "negative six hundred and thirty-seven million seven thousand fifty-nine")
+            , test "one hundred thousand and thirty million" <|
+                \() ->
+                    Expect.equal (Err [ { col = 36, problem = Parser.Problem "Orders must descend to be a valid number", row = 1 } ])
+                        (run numParser "one hundred thousand thirty million")
             ]
         ]

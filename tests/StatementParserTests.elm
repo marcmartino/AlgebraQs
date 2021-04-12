@@ -1,45 +1,29 @@
 module StatementParserTests exposing (tests)
 
 import Expect
-import StatementParser exposing (StatementValue(..), answer, parseStatement, toNumeralEquation)
+import Parser exposing (run)
+import StatementParser exposing (StatementValue(..), prepQuestion, statementParser)
+import StatementVizualizers exposing (simplifyOps)
 import Test exposing (..)
 
 
-toStatement : String -> StatementValue
-toStatement =
-    parseStatement >> Result.withDefault (Num 0)
+answer : String -> Maybe Int
+answer problem =
+    case run statementParser <| prepQuestion <| problem of
+        Ok (Statement stmt) ->
+            simplifyOps stmt
+
+        Ok (Num num) ->
+            Just num
+
+        _ ->
+            Nothing
 
 
 tests : Test
 tests =
     describe "Statement Parsers"
-        [ describe "Parsing to Numeral Equation"
-            [ test "simple" <|
-                \() -> Expect.equal "1" <| toNumeralEquation <| toStatement "What is 1?"
-            , test "two numbers" <|
-                \() -> Expect.equal "1 + 2" <| toNumeralEquation <| toStatement "What is 1 + 2?"
-            , test "long number simple statement" <|
-                \() ->
-                    Expect.equal "-899,933" <|
-                        toNumeralEquation <|
-                            toStatement
-                                "What is negative eight hundred and ninety-nine thousand nine hundred and thirty-three?"
-            , test "long written out example" <|
-                \() ->
-                    Expect.equal "185,589 - -311,820 × 638,519 × -899,933" <|
-                        toNumeralEquation <|
-                            toStatement
-                                ("What is "
-                                    ++ "one hundred and eighty-five thousand five hundred and eighty-nine "
-                                    ++ "minus "
-                                    ++ "negative three hundred and eleven thousand eight hundred and twenty "
-                                    ++ "times "
-                                    ++ "six hundred and thirty-eight thousand five hundred and nineteen "
-                                    ++ "times "
-                                    ++ "negative eight hundred and ninety-nine thousand nine hundred and thirty-three?"
-                                )
-            ]
-        , describe "Statement Parsing"
+        [ describe "Statement Parsing"
             [ test "just a number" <|
                 \() ->
                     Expect.equal (Just 5) <| answer "What is 5?"

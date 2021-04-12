@@ -30,7 +30,7 @@ operator =
 
 scalar : Random.Generator String
 scalar =
-    Random.int -1000000 1000000
+    Random.int 1 1000000
         |> Random.map (writeOut >> Result.withDefault "zero")
 
 

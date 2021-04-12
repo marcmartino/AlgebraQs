@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "//algebraQs.marmar.io/precache-manifest.51e6920841f9ce5dd8e35f32dfebcc24.js"
+  "//algebraQs.marmar.io/precache-manifest.51ffbeabcb9a3731c339bdcc2543f0a3.js"
 );
 
 workbox.core.skipWaiting();
